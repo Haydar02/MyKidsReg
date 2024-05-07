@@ -19,11 +19,13 @@ namespace MyKidsReg.Services
     {
         private readonly IUserRepository _rep;
         private readonly PasswordService _passwordService;
+        private readonly CommunicationService _communication;
 
-        public UserService(IUserRepository rep, PasswordService passwordService)
+        public UserService(IUserRepository rep, PasswordService passwordService, CommunicationService communication)
         {
             _rep = rep;
             _passwordService = passwordService;
+            _communication = communication;
         }
 
         public void createUserWithTemporaryPAssword(string username, string password, string email, int Mobil_Nr)
@@ -38,53 +40,29 @@ namespace MyKidsReg.Services
                 E_mail = email,
                 Mobil_nr = Mobil_Nr
             };
-            _rep.CreateUser(newUser);
-            SendTemoraryPassword(username, temporaryPassword,"email");
-
+            try
+            {
+                _rep.CreateUser(newUser);
+                _communication.SendTemoraryPassword(username, temporaryPassword, "email");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while creating user: {ex.Message}");
+            }
         }
         private string GenerateTemporaryPassword()
         {
             return Guid.NewGuid().ToString().Substring(0, 8);
         }
-        private void SendTemoraryPassword(string username, string temporaryPassword, string deliveryMethod)
-        {
-            var user = _rep.GetUserByUsername(username);
-            if (user == null)
-            {
-                throw new Exception("Brugeren findes ikke ");
-
-            }
-            switch (deliveryMethod.ToLower())
-            {
-                case "email":
-                    SendEmail(user.E_mail, "MidlerTidigt Email", $"Din midlertidige Adgangskode er :{temporaryPassword}");
-                    break;
-                case "sms":
-                    if(user.Mobil_nr != 0)
-                    {
-                        string mobil_number = user.Mobil_nr.ToString();
-                        SendSMS(mobil_number, $"Din midlertidigt adgangskode er :{temporaryPassword}");
-                    }
-                    else
-                    {
-                        throw new Exception("Mobilnummeret er ikke tilgængeligt");
-                    }
-                   
-                    break;
-                default:
-                    Console.WriteLine("Ugyldig leveringsmetod.");
-                    break;
-            }
-
-        }
-        public void SendEmail(string userEmail, string subject, string body)
-        {
-            Console.WriteLine($"E_mail sendt til {userEmail} med emne {subject} og inhold : {body}");
-        }
-        public void SendSMS(string mobil_Nr, string message)
-        {
-            Console.WriteLine($" SMS sendt til {mobil_Nr} med besked : {message}");
-        }
+       
+        //public void SendEmail(string userEmail, string subject, string body)
+        //{
+        //    Console.WriteLine($"E_mail sendt til {userEmail} med emne {subject} og inhold : {body}");
+        //}
+        //public void SendSMS(string mobil_Nr, string message)
+        //{
+        //    Console.WriteLine($" SMS sendt til {mobil_Nr} med besked : {message}");
+        //}
 
         public void CreaateUser(string username, string password, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
         {
