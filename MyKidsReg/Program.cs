@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MyKidsReg.Models;
 using MyKidsReg.Repositories;
 using MyKidsReg.Services;
+using MyKidsReg.Services.CommunicationsServices;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);

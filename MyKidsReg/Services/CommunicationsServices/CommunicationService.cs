@@ -3,12 +3,12 @@ using MyKidsReg.Repositories;
 using System.Net;
 using System.Net.Mail;
 
-namespace MyKidsReg.Services
+namespace MyKidsReg.Services.CommunicationsServices
 {
     public class CommunicationService
     {
         private readonly IUserRepository _rep;
-    
+
 
         public CommunicationService(IUserRepository rep)
         {

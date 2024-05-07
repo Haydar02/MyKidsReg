@@ -1,4 +1,4 @@
-﻿namespace MyKidsReg.Services
+﻿namespace MyKidsReg.Services.CommunicationsServices
 {
     public class PasswordService
     {
