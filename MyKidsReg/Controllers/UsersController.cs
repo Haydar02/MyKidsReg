@@ -11,12 +11,17 @@ namespace MyKidsReg.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-        
-       
-public UsersController(IUserService userService)
+        private readonly CommunicationService _communicationService;
+        private readonly ILogger<UsersController> _logger;
+
+        public UsersController(IUserService userService, CommunicationService communicationService, ILogger<UsersController> logger)
         {
             _userService = userService;
+            _communicationService = communicationService;
+            _logger = logger;
         }
+
+
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -38,13 +43,26 @@ public UsersController(IUserService userService)
 
         // POST api/<UsersController>
         [HttpPost]
-        public IActionResult CreateUser( User user)
+        public IActionResult CreateUser(User user)
         {
-            _userService.CreaateUser(user.User_Name,"", user.Name,
+            _userService.createUserWithTemporaryPAssword(user.User_Name, user.Name,
                                      user.Last_name, user.Address, user.Zip_code,
                                      user.E_mail, user.Mobil_nr, user.Usertype);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.User_Id }, user);  
+
+            // Her kan du kalde SendTemoraryPassword fra CommunicationService for at sende en velkomst-e-mail
+            try
+            {
+                _communicationService.SendEmail(user.E_mail, "MidlertidigAdgangskode", "email");
+            }
+            catch (Exception ex)
+            {
+                // Håndter eventuelle fejl, f.eks. logning af dem
+                _logger.LogError($"Fejl under afsendelse af velkomst-e-mail til bruger {user.E_mail}: {ex.Message}");
+            }
+
+            return CreatedAtAction(nameof(GetUserById), new { id = user.User_Id }, user);
         }
+
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]

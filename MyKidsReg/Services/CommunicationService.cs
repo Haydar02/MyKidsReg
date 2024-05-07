@@ -1,4 +1,5 @@
-﻿using MyKidsReg.Repositories;
+﻿using MyKidsReg.Models;
+using MyKidsReg.Repositories;
 using System.Net;
 using System.Net.Mail;
 
@@ -7,6 +8,7 @@ namespace MyKidsReg.Services
     public class CommunicationService
     {
         private readonly IUserRepository _rep;
+    
 
         public CommunicationService(IUserRepository rep)
         {
@@ -15,13 +17,14 @@ namespace MyKidsReg.Services
 
         public void SendEmail(string emailAddress, string subject, string body)
         {
-            using (var client = new SmtpClient("smpt.mail.outlook.com"))
+            using (var client = new SmtpClient("smtp.mail.outlook.com"))
             {
                 client.Port = 587;
                 client.Credentials = new NetworkCredential("MyKidsReg@outlook.com", "MitSkoleProjekt2");
                 client.EnableSsl = true;
 
                 var message = new MailMessage(
+
 
                     from: new MailAddress("MyKidsReg@outlook.com"),
                     to: new MailAddress(emailAddress))

@@ -8,8 +8,10 @@ namespace MyKidsReg.Services
 {
     public interface IUserService
     {
-        void createUserWithTemporaryPAssword(string username, string password, string email, int Mobil_Nr);
-        void CreaateUser(string username, string password,string name, string last_name, string adress,int zip_code,string E_mail,long mobilNumber, User_type user_Type);
+        void createUserWithTemporaryPAssword(string username, string name, string last_name,
+                                                    string adress, int zip_code, string E_mail,
+                                                    long mobilNumber, User_type user_Type);
+        void CreaateUser(string username,string name, string last_name, string adress,int zip_code,string E_mail,long mobilNumber, User_type user_Type);
         User GetUserByID(int id);
         User GetUserByName(string username);
         void UpdateUser(int id, User user);
@@ -28,7 +30,9 @@ namespace MyKidsReg.Services
             _communication = communication;
         }
 
-        public void createUserWithTemporaryPAssword(string username, string password, string email, int Mobil_Nr)
+        public void createUserWithTemporaryPAssword(string username, string name, string last_name, 
+                                                    string adress, int zip_code, string E_mail, 
+                                                    long mobilNumber, User_type user_Type)
         {
             string temporaryPassword = GenerateTemporaryPassword();
             string passwordHash = _passwordService.HashPassword(temporaryPassword);
@@ -37,8 +41,13 @@ namespace MyKidsReg.Services
             {
                 User_Name = username,
                 Password = passwordHash,
-                E_mail = email,
-                Mobil_nr = Mobil_Nr
+                Name = name,
+                Last_name = last_name,
+                Address = adress,
+                Zip_code = zip_code,
+                E_mail = E_mail,
+                Mobil_nr = mobilNumber,
+                Usertype = user_Type
             };
             try
             {
@@ -64,13 +73,13 @@ namespace MyKidsReg.Services
         //    Console.WriteLine($" SMS sendt til {mobil_Nr} med besked : {message}");
         //}
 
-        public void CreaateUser(string username, string password, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
+        public void CreaateUser(string username, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
         {
-           string passwordHash = _passwordService.HashPassword(password);
+          // string passwordHash = _passwordService.HashPassword(password);
             var newUser = new User
             {
                 User_Name = username,
-                Password = passwordHash,
+                //Password = passwordHash,
                 Name = name,
                 Last_name = last_name,
                 Address = adress,
