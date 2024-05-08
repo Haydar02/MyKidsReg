@@ -29,4 +29,20 @@ public partial class Instutution
 
     [InverseProperty("Intitution")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+    public void NameValidate()
+    {
+        if (Name == null)
+        {
+            throw new ArgumentNullException("Angiv venligst et navn");
+        }
+        if (Name.Length <= 5 || Name.Length >= 15)
+        {
+            throw new ArgumentOutOfRangeException("Navnet skal mindst være 2 tegn og maksimalt 15 tegn");
+        }
+    }
+
+    public void InstitutionValidate()
+    {
+        NameValidate();
+    }
 }

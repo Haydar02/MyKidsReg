@@ -57,4 +57,43 @@ public partial class User
 
     [InverseProperty("User")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+    public void UsernameValidate()
+    {
+        if (User_Name == null)
+        {
+            throw new ArgumentNullException("Angiv venligst et navn");
+        }
+        if (User_Name.Length <= 5 || User_Name.Length >= 15)
+        {
+            throw new ArgumentOutOfRangeException("Brugernavnet skal mindst være 5 tegn og maksimalt 15 tegn");
+        }
+    }
+
+    public void ZipCodeValidate()
+    {
+        if (Zip_code.ToString().Length == 4) // Zip Code konverteres til en streng med ToString()-metoden, og derefter kontrolleres længden af denne streng.
+        {
+            throw new ArgumentOutOfRangeException("Postnummeret skal være 4 tegn langt");
+        }
+    }
+
+    public void PhoneNrValidate()
+    {
+        if (Mobil_nr <= 0)
+        {
+            throw new ArgumentOutOfRangeException("Mobilnummeret må ikke være nul eller negativt");
+        }
+        if (Mobil_nr < 10000000 || Mobil_nr > 999999999999)
+        {
+            throw new ArgumentOutOfRangeException("Mobilnummeret skal være mellem 8 og 12 cifre");
+        }
+    }
+    public void UserValidate()
+    {
+        UsernameValidate();
+        ZipCodeValidate();
+        PhoneNrValidate();
+    }
 }
+
+

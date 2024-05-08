@@ -29,4 +29,33 @@ public partial class Student
     [ForeignKey("Department_id")]
     [InverseProperty("Students")]
     public virtual Department Department { get; set; }
+    public void NameValidate()
+    {
+        if (Name == null)
+        {
+            throw new ArgumentNullException("Navn skal angives.");
+        }
+        else if (Name.Length < 2 || Name.Length > 15)
+        {
+            throw new ArgumentOutOfRangeException("Navn skal være mellem 2 og 15 tegn.");
+        }
+    }
+
+    public void LastNameValidate()
+    {
+        if (Last_name == null)
+        {
+            throw new ArgumentNullException("Efternavn skal angives.");
+        }
+        else if (Last_name.Length < 2 || Last_name.Length > 15)
+        {
+            throw new ArgumentOutOfRangeException("Efternavn skal være mellem 2 og 15 tegn.");
+        }
+    }
+
+    public void StudentValidate()
+    {
+        NameValidate();
+        LastNameValidate();
+    }
 }

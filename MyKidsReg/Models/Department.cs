@@ -27,4 +27,20 @@ public partial class Department
 
     [InverseProperty("Department")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+    public void NameValidate()
+    {
+        if (Name == null)
+        {
+            throw new ArgumentNullException("Angiv venligst et navn");
+        }
+        if (Name.Length <= 5 || Name.Length >= 15)
+        {
+            throw new ArgumentOutOfRangeException("Navnet skal mindst være 2 tegn og maksimalt 15 tegn");
+        }
+    }
+
+    public void DepartmentValidate()
+    {
+        NameValidate();
+    }
 }
