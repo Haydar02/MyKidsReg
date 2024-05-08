@@ -1,7 +1,9 @@
 ﻿using MyKidsReg.Models;
 using MyKidsReg.Repositories;
+using System;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace MyKidsReg.Services.CommunicationsServices
 {
@@ -9,32 +11,30 @@ namespace MyKidsReg.Services.CommunicationsServices
     {
         private readonly IUserRepository _rep;
 
-
         public CommunicationService(IUserRepository rep)
         {
             _rep = rep;
         }
 
-        public void SendEmail(string emailAddress, string subject, string body)
+        public async Task SendEmail(string emailAddress, string subject, string body)
         {
-            using (var client = new SmtpClient("smtp.mail.outlook.com"))
+            using (var client = new SmtpClient("send.one.com"))
             {
-                client.Port = 587;
-                client.Credentials = new NetworkCredential("MyKidsReg@outlook.com", "MitSkoleProjekt2");
-                client.EnableSsl = true;
+                client.Port = 587; // Portnummer for StartTLS
+                client.Credentials = new NetworkCredential("muhammed@cosan.dk", "TestSkole");
+                client.EnableSsl = true; // Aktiver StartTLS
 
                 var message = new MailMessage(
-
-
-                    from: new MailAddress("MyKidsReg@outlook.com"),
+                    from: new MailAddress("muhammed@cosan.dk"),
                     to: new MailAddress(emailAddress))
                 {
                     Subject = subject,
                     Body = body
                 };
+
                 try
                 {
-                    client.Send(message);
+                    await client.SendMailAsync(message);
                     Console.WriteLine($"Email sent to {emailAddress} with subject '{subject}' and body: {body}");
                 }
                 catch (Exception ex)
@@ -43,40 +43,41 @@ namespace MyKidsReg.Services.CommunicationsServices
                 }
             }
         }
+
         public void SendSMS(string phoneNumber, string message)
         {
             Console.WriteLine($" SMS sendt til {phoneNumber} med besked : {message}");
         }
-        public void SendTemoraryPassword(string username, string temporaryPassword, string deliveryMethod)
+
+        public async Task SendTemporaryPassword(string username, string temporaryPassword, string deliveryMethod)
         {
-            var user = _rep.GetUserByUsername(username);
+            Console.WriteLine("Sending temporary password...");
+            var user = await _rep.GetUserByUsername(username);
             if (user == null)
             {
                 throw new Exception("Brugeren findes ikke ");
-
             }
+
             switch (deliveryMethod.ToLower())
             {
                 case "email":
-                    SendEmail(user.E_mail, "MidlerTidigt Email", $"Din midlertidige Adgangskode er :{temporaryPassword}");
+                    await SendEmail(user.E_mail, "Midlertidigt Email", $"Din midlertidige Adgangskode til MyKidsReg er: {temporaryPassword}");
                     break;
                 case "sms":
                     if (user.Mobil_nr != 0)
                     {
-                        string mobil_number = user.Mobil_nr.ToString();
-                        SendSMS(mobil_number, $"Din midlertidigt adgangskode er :{temporaryPassword}");
+                        string mobilNumber = user.Mobil_nr.ToString();
+                        SendSMS(mobilNumber, $"Din midlertidige adgangskode er: {temporaryPassword}");
                     }
                     else
                     {
                         throw new Exception("Mobilnummeret er ikke tilgængeligt");
                     }
-
                     break;
                 default:
                     Console.WriteLine("Ugyldig leveringsmetod.");
                     break;
             }
-
         }
     }
 }

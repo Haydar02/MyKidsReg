@@ -5,11 +5,12 @@ namespace MyKidsReg.Repositories
 {
     public interface IUserRepository
     {
-        User GetUserById(int userId);
-        User GetUserByUsername(string username);
-        void CreateUser(User newUser);
-        void UpdateUser(User updateUser);
-        void DeleteUser(int userId);
+        Task <List<User>> GetAll();
+        Task <User> GetUserById(int userId);
+        Task <User> GetUserByUsername(string username);
+        Task CreateUser(User newUser);
+        Task UpdateUser(User updateUser);
+        Task DeleteUser(int userId);
     }
     public class UserRepositories : IUserRepository
     {
@@ -20,13 +21,13 @@ namespace MyKidsReg.Repositories
             _context = context;
         }
 
-        public void CreateUser(User newUser)
+        public async Task CreateUser(User newUser)
         {
             _context.Users.Add(newUser);
             _context.SaveChanges();
         }
 
-        public void DeleteUser(int userId)
+        public async Task DeleteUser(int userId)
         {
             var user = _context.Users.FirstOrDefault(u => u.User_Id == userId);
             if(user != null)
@@ -40,17 +41,22 @@ namespace MyKidsReg.Repositories
             }
         }
 
-        public User? GetUserById(int userId)
+        public async Task< List< User>> GetAll()
+        {
+           return _context.Users.ToList();
+        }
+
+        public async Task <User?> GetUserById(int userId)
         {
             return _context.Users.FirstOrDefault(u => u.User_Id == userId);
         }
 
-        public User? GetUserByUsername(string username)
+        public async Task <User?> GetUserByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.User_Name == username);
         }
 
-        public void UpdateUser(User updateUser)
+        public async Task UpdateUser(User updateUser)
         {
             _context.Users.Update(updateUser);
             _context.SaveChanges();

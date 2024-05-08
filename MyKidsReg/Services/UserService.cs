@@ -9,14 +9,15 @@ namespace MyKidsReg.Services
 {
     public interface IUserService
     {
-        void createUserWithTemporaryPAssword(string username, string name, string last_name,
+        Task createUserWithTemporaryPAssword(string username, string name, string last_name,
                                                     string adress, int zip_code, string E_mail,
                                                     long mobilNumber, User_type user_Type);
-        void CreaateUser(string username,string name, string last_name, string adress,int zip_code,string E_mail,long mobilNumber, User_type user_Type);
-        User GetUserByID(int id);
-        User GetUserByName(string username);
-        void UpdateUser(int id, User user);
-        void DeleteUser(int id);
+        Task CreaateUser(string username,string name, string last_name, string adress,int zip_code,string E_mail,long mobilNumber, User_type user_Type);
+        Task <User> GetUserByID(int id);
+        Task<List<User>> GetAlle();
+        Task< User> GetUserByName(string username);
+        Task UpdateUser(int id, User user);
+        Task DeleteUser(int id);
     }
     public class UserService : IUserService
     {
@@ -31,7 +32,7 @@ namespace MyKidsReg.Services
             _communication = communication;
         }
 
-        public void createUserWithTemporaryPAssword(string username, string name, string last_name, 
+        public async Task createUserWithTemporaryPAssword(string username, string name, string last_name, 
                                                     string adress, int zip_code, string E_mail, 
                                                     long mobilNumber, User_type user_Type)
         {
@@ -52,8 +53,8 @@ namespace MyKidsReg.Services
             };
             try
             {
-                _rep.CreateUser(newUser);
-                _communication.SendTemoraryPassword(username, temporaryPassword, "email");
+               await _rep.CreateUser(newUser);
+               await _communication.SendTemporaryPassword(username, temporaryPassword, "email");
             }
             catch (Exception ex)
             {
@@ -65,16 +66,8 @@ namespace MyKidsReg.Services
             return Guid.NewGuid().ToString().Substring(0, 8);
         }
        
-        //public void SendEmail(string userEmail, string subject, string body)
-        //{
-        //    Console.WriteLine($"E_mail sendt til {userEmail} med emne {subject} og inhold : {body}");
-        //}
-        //public void SendSMS(string mobil_Nr, string message)
-        //{
-        //    Console.WriteLine($" SMS sendt til {mobil_Nr} med besked : {message}");
-        //}
 
-        public void CreaateUser(string username, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
+        public async Task CreaateUser(string username, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
         {
           // string passwordHash = _passwordService.HashPassword(password);
             var newUser = new User
@@ -90,22 +83,22 @@ namespace MyKidsReg.Services
                 Usertype = user_Type
 
             };
-            _rep.CreateUser(newUser);
+           await _rep.CreateUser(newUser);
         }
 
-        public User GetUserByID(int id)
+        public async Task< User> GetUserByID(int id)
         {
-            return _rep.GetUserById(id);
+            return await _rep.GetUserById(id);
         }
 
-        public User GetUserByName(string username)
+        public async Task<User> GetUserByName(string username)
         {
-            return _rep.GetUserByUsername(username);
+            return await _rep.GetUserByUsername(username);
         }
 
-        public void UpdateUser(int id, User update)
+        public async Task UpdateUser(int id, User update)
         {
-            var existingUser = _rep.GetUserById(id);
+            var existingUser = await _rep.GetUserById(id);
             if (existingUser != null)
             {
               existingUser.User_Name = update.User_Name;
@@ -122,9 +115,14 @@ namespace MyKidsReg.Services
             }
         }
 
-        public void DeleteUser(int id)
+        public async Task DeleteUser(int id)
         {
             _rep.DeleteUser(id);
+        }
+
+        public async Task < List< User>> GetAlle()
+        {
+            return  await _rep.GetAll();
         }
     }
 }
