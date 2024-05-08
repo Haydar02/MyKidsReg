@@ -1,4 +1,5 @@
-﻿using MyKidsReg.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MyKidsReg.Models;
 using System.ComponentModel.Design;
 
 namespace MyKidsReg.Repositories
@@ -11,6 +12,7 @@ namespace MyKidsReg.Repositories
         Task CreateUser(User newUser);
         Task UpdateUser(User updateUser);
         Task DeleteUser(int userId);
+        Task<bool> UserExists(string username, string email, long mobileNumber);
     }
     public class UserRepositories : IUserRepository
     {
@@ -23,9 +25,24 @@ namespace MyKidsReg.Repositories
 
         public async Task CreateUser(User newUser)
         {
-            _context.Users.Add(newUser);
-            _context.SaveChanges();
+            try
+            {
+                if (await UserExists(newUser.User_Name, newUser.E_mail, newUser.Mobil_nr))
+                {
+                    throw new Exception("En bruger med det angivne brugernavn, e-mail eller mobilnummer findes allerede.");
+                }
+
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Her kan du logge fejlen eller give en brugervenlig besked
+                throw new Exception("Der opstod en fejl under oprettelse af brugeren. Kontakt venligst systemadministratoren.");
+            }
         }
+
+
 
         public async Task DeleteUser(int userId)
         {
@@ -61,5 +78,10 @@ namespace MyKidsReg.Repositories
             _context.Users.Update(updateUser);
             _context.SaveChanges();
         }
+        public async Task<bool> UserExists(string username, string email, long mobileNumber)
+        {
+            return await _context.Users.AnyAsync(u => u.User_Name == username || u.E_mail == email || u.Mobil_nr == mobileNumber);
+        }
+
     }
 }
