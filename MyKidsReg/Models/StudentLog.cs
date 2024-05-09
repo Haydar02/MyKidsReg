@@ -9,16 +9,20 @@ using Microsoft.EntityFrameworkCore;
 namespace MyKidsReg.Models;
 public enum Type_Log
 {
-    sick,
-    gone,
-    arrived
+    Sick,
+    Gone,
+    Arrived
 }
+
 [Keyless]
 [Table("StudentLog")]
 public partial class StudentLog
 {
     public int Student_Id { get; set; }
 
+    [Required]
+    [StringLength(10)]
+    [Unicode(false)]
     public Type_Log Type { get; set; }
 
     public DateOnly? Date { get; set; }

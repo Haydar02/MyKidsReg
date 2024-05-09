@@ -44,11 +44,11 @@ public partial class Instutution
 
     public void ZipCodeValidate()
     {
-        if (Zip_Code < 999) 
+        if (Zip_Code < 999)
         {
             throw new ArgumentOutOfRangeException("Postnummeret skal være 4 tegn langt");
         }
-        if(Zip_Code > 11111)
+        if (Zip_Code > 11111)
         {
             throw new ArgumentOutOfRangeException("Postnummeret skal være 4 tegn langt");
         }

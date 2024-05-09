@@ -27,8 +27,8 @@ namespace MyKidsReg.Models.Tests
         {
             _user.PhoneNrValidate();
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _phoneNumberLess.PhoneNrValidate());
-             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _phoneEmpty.PhoneNrValidate());
-           
+            Assert.ThrowsException<ArgumentOutOfRangeException>(() => _phoneEmpty.PhoneNrValidate());
+
         }
 
         [TestMethod()]
@@ -61,7 +61,7 @@ namespace MyKidsReg.Models.Tests
         [TestMethod()]
         public void ZipCodeValidateTest()
         {
-          _user.ZipCodeValidate();
+            _user.ZipCodeValidate();
             Assert.AreEqual(4, _user.Zip_code.ToString().Length);
             Assert.IsTrue(_user.Zip_code == userWithValidZipCode.Zip_code);
 

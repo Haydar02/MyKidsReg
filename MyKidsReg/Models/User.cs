@@ -96,10 +96,10 @@ public partial class User
         {
             throw new ArgumentNullException("Udfyld postnummer tak. den må ikke være tom");
         }
-       if (Zip_code < 1000 || Zip_code > 9999)
-    {
-        throw new ArgumentOutOfRangeException("Postnummeret skal være præcis 4 cifre langt");
-    }
+        if (Zip_code < 1000 || Zip_code > 9999)
+        {
+            throw new ArgumentOutOfRangeException("Postnummeret skal være præcis 4 cifre langt");
+        }
     }
 
     public void PhoneNrValidate()
