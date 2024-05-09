@@ -61,7 +61,8 @@ namespace MyKidsReg.Services.CommunicationsServices
             switch (deliveryMethod.ToLower())
             {
                 case "email":
-                    await SendEmail(user.E_mail, "Midlertidigt Email", $"Din midlertidige Adgangskode til MyKidsReg er: {temporaryPassword}");
+                    DateTime dateTime = DateTime.Now;
+                    await SendEmail(user.E_mail, "Midlertidigt Email", $"Din midlertidige Adgangskode til MyKidsReg er: {temporaryPassword} , /n du har 5 timer til at ændre din adgangskode fra nu : {dateTime}");
                     break;
                 case "sms":
                     if (user.Mobil_nr != 0)

@@ -80,8 +80,33 @@ namespace MyKidsReg.Repositories
         }
         public async Task<bool> UserExists(string username, string email, long mobileNumber)
         {
-            return await _context.Users.AnyAsync(u => u.User_Name == username || u.E_mail == email || u.Mobil_nr == mobileNumber);
+            try
+            {
+                if (username != null)
+                {
+                    return await _context.Users.AnyAsync(u => u.User_Name == username);
+                }
+                else if (email != null)
+                {
+                    return await _context.Users.AnyAsync(u => u.E_mail == email);
+                }
+                else if (mobileNumber != 0)
+                {
+                    return await _context.Users.AnyAsync(u => u.Mobil_nr == mobileNumber);
+                }
+                else
+                {
+                    return false; 
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Fejl under kontrol af brugerens eksistens: {ex.Message}");
+                throw; 
+            }
         }
+
 
     }
 }

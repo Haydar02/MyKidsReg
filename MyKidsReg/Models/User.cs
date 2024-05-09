@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -54,9 +55,28 @@ public partial class User
     public long Mobil_nr { get; set; }
 
     public User_type Usertype { get; set; }
-
+    [JsonIgnore]
     [InverseProperty("User")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+
+    [NotMapped]
+    public DateTime? TemporaryPasswordExpiration { get; set; }
+
+    public bool IsTemporaryPasswordExpired()
+    {
+        // Kontroller om der er en udløbstid og om den er større end den aktuelle tid
+        if (TemporaryPasswordExpiration.HasValue && TemporaryPasswordExpiration.Value > DateTime.Now)
+        {
+            // Midlertidig adgangskode er gyldig
+            return false;
+        }
+        else
+        {
+            // Midlertidig adgangskode er udløbet
+            return true;
+        }
+    }
+
     public void UsernameValidate()
     {
         if (User_Name == null)

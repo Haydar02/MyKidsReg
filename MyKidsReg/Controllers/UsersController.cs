@@ -42,15 +42,14 @@ namespace MyKidsReg.Controllers
             return Ok(user);
         }
 
-        // POST api/<UsersController>
-        [HttpPost]
+        
         // POST api/<UsersController>
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            await _userService.createUserWithTemporaryPAssword(user.User_Name, user.Name,
-                                         user.Last_name, user.Address, user.Zip_code,
-                                         user.E_mail, user.Mobil_nr, user.Usertype);
+            await _userService.createUserWithTemporaryPassword(user.User_Name, user.Name,
+                                             user.Last_name, user.Address, user.Zip_code,
+                                             user.E_mail, user.Mobil_nr, user.Usertype);
 
             return CreatedAtAction(nameof(GetUserById), new { id = user.User_Id }, user);
         }
