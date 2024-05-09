@@ -15,6 +15,7 @@ public enum User_type
     Padagogue,
     Parent
 }
+
 public partial class User
 {
     [Key]
@@ -58,7 +59,7 @@ public partial class User
     [JsonIgnore]
     [InverseProperty("User")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
-
+    [JsonIgnore]
     [NotMapped]
     public DateTime? TemporaryPasswordExpiration { get; set; }
 
@@ -103,11 +104,18 @@ public partial class User
         {
             throw new ArgumentOutOfRangeException("Mobilnummeret må ikke være nul eller negativt");
         }
-        if (Mobil_nr < 10000000 || Mobil_nr > 999999999999)
+        if (Mobil_nr < 10000000 || Mobil_nr >= 999999999999)
         {
             throw new ArgumentOutOfRangeException("Mobilnummeret skal være mellem 8 og 12 cifre");
         }
+
+        string mobilNrString = Mobil_nr.ToString();
+        if (!(mobilNrString.StartsWith("0") || mobilNrString.StartsWith("+")))
+        {
+            throw new ArgumentException("Mobilnummeret skal starte med '0' eller '+'");
+        }
     }
+
     public void UserValidate()
     {
         UsernameValidate();
@@ -115,5 +123,25 @@ public partial class User
         PhoneNrValidate();
     }
 }
+public static class UserExtensions
+{
+    public static string ToText(this User_type userType)
+    {
+        switch (userType)
+        {
+            case User_type.Super_Admin:
+                return "Super Admin";
+            case User_type.Admin:
+                return "Admin";
+            case User_type.Padagogue:
+                return "Padagogue";
+            case User_type.Parent:
+                return "Parent";
+            default:
+                throw new ArgumentOutOfRangeException(nameof(userType), userType, "Unsupported user type");
+        }
+    }
+}
+
 
 

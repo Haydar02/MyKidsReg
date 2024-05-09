@@ -56,6 +56,8 @@ namespace MyKidsReg.Services
                     Mobil_nr = mobilNumber,
                     Usertype = user_Type
                 };
+            
+
             DateTime expirationTime = DateTime.Now.AddHours(5);
             newUser.TemporaryPasswordExpiration = expirationTime;
 
@@ -118,7 +120,7 @@ namespace MyKidsReg.Services
 
         public async Task CreaateUser(string username, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
         {
-          // string passwordHash = _passwordService.HashPassword(password);
+            // string passwordHash = _passwordService.HashPassword(password);
 
             var newUser = new User
             {
@@ -133,6 +135,8 @@ namespace MyKidsReg.Services
                 Usertype = user_Type
 
             };
+            string userTypeText = newUser.Usertype.ToText();
+            Console.WriteLine($"User type: {userTypeText}");
             newUser.UsernameValidate();
            await _rep.CreateUser(newUser);
         }
