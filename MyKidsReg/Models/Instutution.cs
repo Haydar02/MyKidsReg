@@ -29,6 +29,7 @@ public partial class Instutution
 
     [InverseProperty("Intitution")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+
     public void NameValidate()
     {
         if (Name == null)
