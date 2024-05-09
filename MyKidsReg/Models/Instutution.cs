@@ -38,12 +38,25 @@ public partial class Instutution
         }
         if (Name.Length <= 5 || Name.Length >= 15)
         {
-            throw new ArgumentOutOfRangeException("Navnet skal mindst være 2 tegn og maksimalt 15 tegn");
+            throw new ArgumentOutOfRangeException("Navnet skal mindst være 5 tegn og maksimalt 15 tegn");
+        }
+    }
+
+    public void ZipCodeValidate()
+    {
+        if (Zip_Code <= 3) 
+        {
+            throw new ArgumentOutOfRangeException("Postnummeret skal være 4 tegn langt");
+        }
+        if(Zip_Code > 5)
+        {
+            throw new ArgumentOutOfRangeException();
         }
     }
 
     public void InstitutionValidate()
     {
         NameValidate();
+        ZipCodeValidate();
     }
 }

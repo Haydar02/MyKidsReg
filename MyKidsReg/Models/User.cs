@@ -92,7 +92,7 @@ public partial class User
 
     public void ZipCodeValidate()
     {
-        if (Zip_code.ToString().Length == 4) // Zip Code konverteres til en streng med ToString()-metoden, og derefter kontrolleres længden af denne streng.
+        if (Zip_code <= 4)
         {
             throw new ArgumentOutOfRangeException("Postnummeret skal være 4 tegn langt");
         }
@@ -115,12 +115,24 @@ public partial class User
             throw new ArgumentException("Mobilnummeret skal starte med '0' eller '+'");
         }
     }
+    public void PasswordValidate()
+    {
+        if (Password == null)
+        {
+            throw new ArgumentNullException("Adgangskode må ikke være tomt");
+        }
+        if (Password.Length <= 4 || Password.Length >= 9)
+        {
+            throw new ArgumentOutOfRangeException("Adgangskoden skal være mindst være mellem 4 og 9 tegn langt");
+        }
+    }
 
     public void UserValidate()
     {
         UsernameValidate();
         ZipCodeValidate();
         PhoneNrValidate();
+        PasswordValidate();
     }
 }
 public static class UserExtensions
@@ -142,6 +154,3 @@ public static class UserExtensions
         }
     }
 }
-
-
-
