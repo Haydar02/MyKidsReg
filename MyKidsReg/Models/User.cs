@@ -92,10 +92,14 @@ public partial class User
 
     public void ZipCodeValidate()
     {
-        if (Zip_code <= 4)
+        if (Zip_code == 0)
         {
-            throw new ArgumentOutOfRangeException("Postnummeret skal være 4 tegn langt");
+            throw new ArgumentNullException("Udfyld postnummer tak. den må ikke være tom");
         }
+       if (Zip_code < 1000 || Zip_code > 9999)
+    {
+        throw new ArgumentOutOfRangeException("Postnummeret skal være præcis 4 cifre langt");
+    }
     }
 
     public void PhoneNrValidate()
@@ -104,13 +108,13 @@ public partial class User
         {
             throw new ArgumentOutOfRangeException("Mobilnummeret må ikke være nul eller negativt");
         }
-        if (Mobil_nr < 10000000 || Mobil_nr >= 999999999999)
+        if (Mobil_nr < 9999999 || Mobil_nr >= 999999999999)
         {
             throw new ArgumentOutOfRangeException("Mobilnummeret skal være mellem 8 og 12 cifre");
         }
 
         string mobilNrString = Mobil_nr.ToString();
-        if (!(mobilNrString.StartsWith("0") || mobilNrString.StartsWith("+")))
+        if ((mobilNrString.StartsWith("0") || mobilNrString.StartsWith("+")))
         {
             throw new ArgumentException("Mobilnummeret skal starte med '0' eller '+'");
         }
@@ -121,7 +125,7 @@ public partial class User
         {
             throw new ArgumentNullException("Adgangskode må ikke være tomt");
         }
-        if (Password.Length <= 4 || Password.Length >= 9)
+        if (Password.Length < 99999 || Password.Length >= 99999999)
         {
             throw new ArgumentOutOfRangeException("Adgangskoden skal være mindst være mellem 4 og 9 tegn langt");
         }
