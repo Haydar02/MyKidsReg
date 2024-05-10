@@ -2,8 +2,11 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -22,13 +25,18 @@ public partial class Student
     [Unicode(false)]
     public string Last_name { get; set; }
 
-    public DateOnly? Birthday { get; set; }
+    [JsonConverter(typeof(DateOnlyConverter))]
+    public DateOnly Birthday { get; set; }
 
     public int? Department_id { get; set; }
-
+    [JsonIgnore]
     [ForeignKey("Department_id")]
     [InverseProperty("Students")]
     public virtual Department Department { get; set; }
+
+
+
+
     public void NameValidate()
     {
         if (Name == null)
@@ -58,4 +66,5 @@ public partial class Student
         NameValidate();
         LastNameValidate();
     }
+
 }

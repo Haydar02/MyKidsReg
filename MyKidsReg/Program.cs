@@ -19,6 +19,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepositories>();
 builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<CommunicationService>();
+builder.Services.AddScoped<IStudentServices, StudentServices>();
+builder.Services.AddScoped<IStudentRepositores, StudentRepositories>();
 
 var app = builder.Build();
 
