@@ -42,6 +42,13 @@ public partial class Instutution
             throw new ArgumentOutOfRangeException("Navnet skal mindst være 5 tegn og maksimalt 15 tegn");
         }
     }
+    public void AddressValidate()
+    {
+        if (string.IsNullOrEmpty(Address))
+        {
+            throw new ArgumentNullException("Angiv venligst en addresse");
+        }
+    }
 
     public void ZipCodeValidate()
     {
@@ -59,5 +66,6 @@ public partial class Instutution
     {
         NameValidate();
         ZipCodeValidate();
+        AddressValidate();
     }
 }

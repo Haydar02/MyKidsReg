@@ -11,6 +11,8 @@ namespace MyKidsReg.Models.Tests
     [TestClass()]
     public class InstututionTests
     {
+        private Instutution _institutionWithValidAddress = new Instutution { Id = 1, Name = "Spirrebakken", Zip_Code = 4000, Address = "Lysalleen 31" };
+        private Instutution _institutionWithEmptyAddress = new Instutution { Id = 2, Name = "Mosehaven", Zip_Code = 5000, Address = "" };
         private Instutution _NameEmptyInstitution = new Instutution { Id = 1, Name = null, Zip_Code = 4000, Address = "Lysalleen 31 " };
         private Instutution _NameUnder5Institution = new Instutution { Id = 1, Name = "hele", Zip_Code = 400, Address = "Lysalleen 31 " };
         private Instutution _NameOver15Institution = new Instutution { Id = 1, Name = "hele4hele4hele15", Zip_Code = 40000, Address = "Hej 31 " };
@@ -41,7 +43,18 @@ namespace MyKidsReg.Models.Tests
             Assert.ThrowsException<ArgumentNullException>(() => _NameEmptyInstitution.NameValidate());
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _NameUnder5Institution.NameValidate());
             Assert.ThrowsException<ArgumentOutOfRangeException>(() => _NameOver15Institution.NameValidate());
+        }
+        [TestMethod()]
+        public void AddressValidateTest_ValidAddress()
+        {
+            _institutionWithValidAddress.AddressValidate();
+        }
 
+        [TestMethod()]
+        public void AddressValidateTest_EmptyAddress()
+        {
+            _institutionWithValidAddress.AddressValidate();
+            Assert.ThrowsException<ArgumentNullException>(() => _institutionWithEmptyAddress.AddressValidate());
         }
     }
 }

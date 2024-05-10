@@ -102,6 +102,22 @@ public partial class User
         }
     }
 
+    public void AddressValidate()
+    {
+        if (string.IsNullOrEmpty(Address))
+        {
+            throw new ArgumentNullException("Angiv venligst en addresse");
+        }
+    }
+
+    public void EmailValidate()
+    {
+        if (string.IsNullOrEmpty(E_mail))
+        {
+            throw new ArgumentNullException("Angiv venligst en email");
+        }
+    }
+
     public void PhoneNrValidate()
     {
         if (Mobil_nr <= 0)
@@ -119,15 +135,27 @@ public partial class User
             throw new ArgumentException("Mobilnummeret skal starte med '0' eller '+'");
         }
     }
+    /* public void PasswordValidate()
+     {
+         if (Password == null)
+         {
+             throw new ArgumentNullException("Adgangskode må ikke være tomt");
+         }
+         if (Password.Length < 99999 || Password.Length >= 999999999)
+         {
+             throw new ArgumentOutOfRangeException("Adgangskoden skal være mindst være mellem 4 og 9 tegn langt");
+         }
+     }*/
+
     public void PasswordValidate()
     {
-        if (Password == null)
+        if (string.IsNullOrEmpty(Password))
         {
             throw new ArgumentNullException("Adgangskode må ikke være tomt");
         }
-        if (Password.Length < 99999 || Password.Length >= 99999999)
+        if (Password.Length < 4 || Password.Length > 9)
         {
-            throw new ArgumentOutOfRangeException("Adgangskoden skal være mindst være mellem 4 og 9 tegn langt");
+            throw new ArgumentOutOfRangeException("Adgangskoden skal være mellem 4 og 9 tegn langt");
         }
     }
 
@@ -137,6 +165,8 @@ public partial class User
         ZipCodeValidate();
         PhoneNrValidate();
         PasswordValidate();
+        AddressValidate();
+        EmailValidate();
     }
 }
 public static class UserExtensions
