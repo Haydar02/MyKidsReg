@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -23,10 +24,10 @@ public partial class Instutution
     public string Address { get; set; }
 
     public int Zip_Code { get; set; }
-
+    [JsonIgnore]
     [InverseProperty("Institution")]
     public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
-
+    [JsonIgnore]
     [InverseProperty("Intitution")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 

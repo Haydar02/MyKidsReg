@@ -26,7 +26,10 @@ builder.Services.AddScoped<PasswordService>();
 builder.Services.AddScoped<CommunicationService>();
 builder.Services.AddScoped<IStudentServices, StudentServices>();
 builder.Services.AddScoped<IStudentRepositores, StudentRepositories>();
-
+builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
+builder.Services.AddScoped<IDepartmentRepositories, DepartmentRepositories>();
+builder.Services.AddScoped<IinstututionServices, InstututionServices>();
+builder.Services.AddScoped<IinstututionRepository, InstututionRepositories>();
 
 var app = builder.Build();
 
