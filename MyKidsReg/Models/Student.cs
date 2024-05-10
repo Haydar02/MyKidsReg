@@ -68,3 +68,41 @@ public partial class Student
     }
 
 }
+
+    //public class DateOnlyConverter : JsonConverter<DateOnly>
+    //{
+    //    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    //    {
+    //        try
+    //        {
+    //            if (reader.TokenType != JsonTokenType.String)
+    //            {
+    //                throw new JsonException("Uventet JSON-token type. Forventede en streng.");
+    //            }
+
+    //            string dateString = reader.GetString();
+
+    //            // Tilføj fejlhåndteringslogik for at inspicere dateString
+
+    //            if (!DateOnly.TryParse(dateString, out DateOnly date))
+    //            {
+    //                throw new JsonException($"Kunne ikke analysere værdien '{dateString}' som en gyldig DateOnly.");
+    //            }
+
+    //            return date;
+    //        }
+    //        catch (JsonException)
+    //        {
+    //            throw; // Kast JsonException igen uden at ændre noget
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            throw new JsonException("Fejl ved konvertering af DateOnly-værdi.", ex);
+    //        }
+    //    }
+
+    //    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
+    //    {
+    //        writer.WriteStringValue(value.ToString());
+    //    }
+    //}

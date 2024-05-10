@@ -1,4 +1,5 @@
-﻿using MyKidsReg.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MyKidsReg.Models;
 using MyKidsReg.Repositories;
 
 namespace MyKidsReg.Services
@@ -7,7 +8,7 @@ namespace MyKidsReg.Services
     {
         Task<List<Student>> GetAll();
         Task<Student> GetByID(int id);
-        Task CreateStudent(Student student);
+        Task<int> CreatePersonAsync(string name, string lastName, DateOnly birthdate, int Department_id);
         Task UpdateStudents(int id, Student student);
         Task DeleteStudent(int id);
     }
@@ -20,10 +21,15 @@ namespace MyKidsReg.Services
             _rep = rep;
         }
 
-        public async Task CreateStudent(Student student)
+        public async Task<int> CreatePersonAsync(string name, string lastName, DateOnly birthdate, int Department_id)
         {
-            await _rep.CreateStudent(student);
+            // Brug repository til at oprette personen uden at gemme ændringerne straks
+            var studentId = await _rep.CreateAsync(name, lastName, birthdate, Department_id, saveChanges: false);
+
+            // Returner den nye students id
+            return studentId;
         }
+
 
         public async Task DeleteStudent(int id)
         {

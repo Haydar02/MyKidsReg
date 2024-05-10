@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyKidsReg.Models;
 using MyKidsReg.Services;
 
@@ -40,17 +41,23 @@ namespace MyKidsReg.Controllers
 
         // POST api/<StudentController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Student student)
+        public async Task<IActionResult> CreateStudent(Student newStudent)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                // Konverter nullable int? til int, hvis det er muligt
+                int departmentId = newStudent.Department_id ?? default(int);
+
+                // Opret ny student i databasen
+                await _service.CreatePersonAsync(newStudent.Name, newStudent.Last_name, newStudent.Birthday, departmentId);
+
+                // Returner en HTTP 200 OK respons
+                return Ok(newStudent);
             }
 
-            await _service.CreateStudent(student);
-            return CreatedAtAction(nameof(Get), new { id = student.Id }, student);
+            // Returner en HTTP 400 BadRequest respons hvis modeltilstanden ikke er gyldig
+            return BadRequest(ModelState);
         }
-
 
         // PUT api/<StudentController>/5
         [HttpPut("{id}")]
