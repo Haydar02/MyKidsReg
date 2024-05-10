@@ -11,16 +11,16 @@ namespace MyKidsReg.Controllers
     [ApiController]
     public class InstitutionController : ControllerBase
     {
-        private readonly IinstututionServices _service;
+        private readonly IinstitutionServices _service;
 
-        public InstitutionController(IinstututionServices service)
+        public InstitutionController(IinstitutionServices service)
         {
             _service = service;
         }
 
         // GET: api/<InstitutionController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Instutution>>> Get()
+        public async Task<ActionResult<IEnumerable<Institution>>> Get()
         {
             var instututions = await _service.GetAll();
             return Ok(instututions);
@@ -28,7 +28,7 @@ namespace MyKidsReg.Controllers
 
         // GET api/<InstitutionController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Instutution>> Get(int id)
+        public async Task<ActionResult<Institution>> Get(int id)
         {
             var instutution = await _service.GetById(id);
             if (instutution == null)
@@ -40,29 +40,29 @@ namespace MyKidsReg.Controllers
 
         // POST api/<InstitutionController>
         [HttpPost]
-        public async Task<IActionResult>CreateInstutution(Instutution newInstutution)
+        public async Task<IActionResult>CreateInstitution(Institution newInstitution)
         {
             if (ModelState.IsValid)
             {
 
-                await _service.CreateInstutution(newInstutution);
+                await _service.CreateInstitution(newInstitution);
 
-                return Ok(newInstutution);
+                return Ok(newInstitution);
             }
             return BadRequest(ModelState);
         }
 
         // PUT api/<InstitutionController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Instutution instutution)
+        public async Task<IActionResult> Put(int id, [FromBody] Institution institution)
         {
-            if (id != instutution.Id)
+            if (id != institution.Id)
             {
                 return BadRequest();
             }
             try
             {
-                await _service.UpdateInstutution(id, instutution);
+                await _service.UpdateInstitution(id, institution);
             }
             catch (InvalidOperationException e)
             {
@@ -75,7 +75,7 @@ namespace MyKidsReg.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteInstutution(id);
+            await _service.DeleteInstitution(id);
             return NoContent();
         }
     }

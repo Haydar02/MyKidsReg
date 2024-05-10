@@ -28,9 +28,5 @@ public partial class Message
 
     [ForeignKey("Intitution_id")]
     [InverseProperty("Messages")]
-    public virtual Instutution Intitution { get; set; }
-
-    [ForeignKey("User_id")]
-    [InverseProperty("Messages")]
-    public virtual User User { get; set; }
+    public virtual Institution Intitution { get; set; }
 }

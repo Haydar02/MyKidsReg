@@ -54,7 +54,7 @@ namespace MyKidsReg.Repositories
         }
         public async Task DeleteDepartment(int id)
         {
-            var item = await _context.Departments.FirstOrDefaultAsync(i => i.Department_id == id);
+            var item = await _context.Departments.FirstOrDefaultAsync(i => i.Id == id);
             if (item != null)
             {
                 _context.Departments.Remove(item);

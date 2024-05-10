@@ -25,7 +25,7 @@ public partial class StudentLog
     [Unicode(false)]
     public Type_Log Type { get; set; }
 
-    public DateOnly? Date { get; set; }
+    public DateTime? Date { get; set; }
 
     public TimeOnly Time { get; set; }
 

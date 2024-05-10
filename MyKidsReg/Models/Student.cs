@@ -2,11 +2,8 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -25,18 +22,15 @@ public partial class Student
     [Unicode(false)]
     public string Last_name { get; set; }
 
-    [JsonConverter(typeof(DateOnlyConverter))]
-    public DateOnly Birthday { get; set; }
+    [StringLength(10)]
+    [Unicode(false)]
+    public string Birthday { get; set; }
 
     public int? Department_id { get; set; }
-    [JsonIgnore]
+
     [ForeignKey("Department_id")]
     [InverseProperty("Students")]
     public virtual Department Department { get; set; }
-
-
-
-
     public void NameValidate()
     {
         if (Name == null)
@@ -68,41 +62,3 @@ public partial class Student
     }
 
 }
-
-    //public class DateOnlyConverter : JsonConverter<DateOnly>
-    //{
-    //    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    //    {
-    //        try
-    //        {
-    //            if (reader.TokenType != JsonTokenType.String)
-    //            {
-    //                throw new JsonException("Uventet JSON-token type. Forventede en streng.");
-    //            }
-
-    //            string dateString = reader.GetString();
-
-    //            // Tilføj fejlhåndteringslogik for at inspicere dateString
-
-    //            if (!DateOnly.TryParse(dateString, out DateOnly date))
-    //            {
-    //                throw new JsonException($"Kunne ikke analysere værdien '{dateString}' som en gyldig DateOnly.");
-    //            }
-
-    //            return date;
-    //        }
-    //        catch (JsonException)
-    //        {
-    //            throw; // Kast JsonException igen uden at ændre noget
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            throw new JsonException("Fejl ved konvertering af DateOnly-værdi.", ex);
-    //        }
-    //    }
-
-    //    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
-    //    {
-    //        writer.WriteStringValue(value.ToString());
-    //    }
-    //}

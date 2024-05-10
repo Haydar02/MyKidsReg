@@ -28,8 +28,8 @@ builder.Services.AddScoped<IStudentServices, StudentServices>();
 builder.Services.AddScoped<IStudentRepositores, StudentRepositories>();
 builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
 builder.Services.AddScoped<IDepartmentRepositories, DepartmentRepositories>();
-builder.Services.AddScoped<IinstututionServices, InstututionServices>();
-builder.Services.AddScoped<IinstututionRepository, InstututionRepositories>();
+builder.Services.AddScoped<IinstitutionServices, InstitutionServices>();
+builder.Services.AddScoped<IinstitutionRepository, InstitutionRepositories>();
 
 var app = builder.Build();
 

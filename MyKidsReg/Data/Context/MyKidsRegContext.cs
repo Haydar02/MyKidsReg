@@ -21,23 +21,23 @@ public partial class MyKidsRegContext : DbContext
 
     public virtual DbSet<Department> Departments { get; set; }
 
-    public virtual DbSet<Instutution> Instututions { get; set; }
+    public virtual DbSet<Institution> Institutions { get; set; }
 
     public virtual DbSet<Message> Messages { get; set; }
 
-    public virtual DbSet<ParentRelation> ParentRelations { get; set; }
+    public virtual DbSet<ParentsRelation> ParentsRelations { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
 
     public virtual DbSet<StudentLog> StudentLogs { get; set; }
 
-    public virtual DbSet<TecherRelation> TecherRelations { get; set; }
+    public virtual DbSet<TeacherRelation> TeacherRelations { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-       => optionsBuilder.UseSqlServer("Data Source=LocalHost;Initial Catalog=MyKidsRegDB;Integrated Security=True;Encrypt=False");
+        => optionsBuilder.UseSqlServer("Data Source=HAYDAR-AL-GHAZA\\MSSQLSERVER19;Initial Catalog=MyKidsReg;Integrated Security=True;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,23 +46,21 @@ public partial class MyKidsRegContext : DbContext
             entity.HasOne(d => d.Institution).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AdminRelation_Instutution1");
-
-            entity.HasOne(d => d.User).WithMany()
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AdminRelation_Users");
         });
 
         modelBuilder.Entity<Department>(entity =>
         {
-            entity.HasKey(e => e.Department_id).HasName("PK_Class");
+            entity.HasKey(e => e.Id).HasName("PK_Class");
 
             entity.HasOne(d => d.Institution).WithMany(p => p.Departments)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Department_Instutution");
         });
 
-        modelBuilder.Entity<Instutution>(entity =>
+        modelBuilder.Entity<Institution>(entity =>
         {
+            entity.HasKey(e => e.Id).HasName("PK_Instutution");
+
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.Zip_Code).ValueGeneratedOnAdd();
         });
@@ -70,24 +68,19 @@ public partial class MyKidsRegContext : DbContext
         modelBuilder.Entity<Message>(entity =>
         {
             entity.HasOne(d => d.Intitution).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Instutution");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Users");
+          
         });
 
-        modelBuilder.Entity<ParentRelation>(entity =>
+        modelBuilder.Entity<ParentsRelation>(entity =>
         {
             entity.HasOne(d => d.Student).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ParentRelations_Student1");
-
-            entity.HasOne(d => d.User).WithMany()
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ParentRelations_Users");
+                .HasConstraintName("FK_ParentsRelations_Student");
         });
 
         modelBuilder.Entity<Student>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Student__3214EC0755E58489");
+            entity.HasKey(e => e.Id).HasName("PK__Student__3214EC0796FE819D");
 
             entity.HasOne(d => d.Department).WithMany(p => p.Students).HasConstraintName("FK_Student_Department");
         });
@@ -99,15 +92,11 @@ public partial class MyKidsRegContext : DbContext
                 .HasConstraintName("FK_StudentLog_Student");
         });
 
-        modelBuilder.Entity<TecherRelation>(entity =>
+        modelBuilder.Entity<TeacherRelation>(entity =>
         {
             entity.HasOne(d => d.Department).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TecherRelations_Department");
-
-            entity.HasOne(d => d.User).WithMany()
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_TecherRelations_Users");
         });
 
         OnModelCreatingPartial(modelBuilder);

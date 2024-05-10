@@ -8,7 +8,7 @@ namespace MyKidsReg.Services
     {
         Task<List<Student>> GetAll();
         Task<Student> GetByID(int id);
-        Task<int> CreatePersonAsync(string name, string lastName, DateOnly birthdate, int Department_id);
+        Task<Student> CreateStudentAsync(Student newStudent);
         Task UpdateStudents(int id, Student student);
         Task DeleteStudent(int id);
     }
@@ -21,13 +21,11 @@ namespace MyKidsReg.Services
             _rep = rep;
         }
 
-        public async Task<int> CreatePersonAsync(string name, string lastName, DateOnly birthdate, int Department_id)
+        public async Task<Student> CreateStudentAsync(Student newStudent)
         {
-            // Brug repository til at oprette personen uden at gemme ændringerne straks
-            var studentId = await _rep.CreateAsync(name, lastName, birthdate, Department_id, saveChanges: false);
-
-            // Returner den nye students id
-            return studentId;
+          return await _rep.CreateAsync(newStudent);
+            
+            
         }
 
 

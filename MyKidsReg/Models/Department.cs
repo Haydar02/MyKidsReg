@@ -13,7 +13,7 @@ namespace MyKidsReg.Models;
 public partial class Department
 {
     [Key]
-    public int Department_id { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [StringLength(50)]
@@ -21,13 +21,16 @@ public partial class Department
     public string Name { get; set; }
 
     public int Institution_Id { get; set; }
+
     [JsonIgnore]
+
     [ForeignKey("Institution_Id")]
     [InverseProperty("Departments")]
-    public virtual Instutution Institution { get; set; }
+    public virtual Institution Institution { get; set; }
     [JsonIgnore]
     [InverseProperty("Department")]
     public virtual ICollection<Student> Students { get; set; } = new List<Student>();
+
     public void NameValidate()
     {
         if (Name == null)

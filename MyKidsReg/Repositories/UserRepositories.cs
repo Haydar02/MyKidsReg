@@ -29,7 +29,7 @@ namespace MyKidsReg.Repositories
             {
                 if (await UserExists(newUser.User_Name, newUser.E_mail, newUser.Mobil_nr))
                 {
-                    throw new Exception("En bruger med det angivne brugernavn, e-mail eller mobilnummer findes allerede.");
+                    throw new Exception("En bruger med det angivne brugernavn, e-mail eller mobilnumme findes allerede.");
                 }
 
                 _context.Users.Add(newUser);

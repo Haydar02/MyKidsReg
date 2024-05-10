@@ -8,7 +8,7 @@ namespace MyKidsReg.Repositories
     {
         Task <List<Student>> GetAll();
         Task<Student>GetByID(int id);
-        Task<int> CreateAsync(string name, string lastName, DateOnly birthdate, int Department_id, bool saveChanges = true);
+        Task<Student> CreateAsync(Student newStudent);
         Task UpdateStudent(int id,Student student);
         Task DeleteStudent(int id);
     }
@@ -21,24 +21,13 @@ namespace MyKidsReg.Repositories
             _context = context;
         }
 
-        public async Task<int> CreateAsync(string name, string lastName, DateOnly birthdate,int Department_id, bool saveChanges = true)
+        public async Task<Student> CreateAsync(Student newStudent)
         {
-            var newStudent = new Student
-            {
-                Name = name,
-                Last_name = lastName,
-                Birthday = birthdate,
-                Department_id= Department_id
-            };
-
             _context.Students.Add(newStudent);
+            await _context.SaveChangesAsync();
 
-            if (saveChanges)
-            {
-                await _context.SaveChangesAsync();
-            }
+            return newStudent;
 
-            return newStudent.Id; // Returner den nye persons id
         }
 
         public async Task DeleteStudent(int id)

@@ -11,14 +11,14 @@ namespace MyKidsReg.Models.Tests
     [TestClass()]
     public class InstututionTests
     {
-        private Instutution _institutionWithValidAddress = new Instutution { Id = 1, Name = "Spirrebakken", Zip_Code = 4000, Address = "Lysalleen 31" };
-        private Instutution _institutionWithEmptyAddress = new Instutution { Id = 2, Name = "Mosehaven", Zip_Code = 5000, Address = "" };
-        private Instutution _NameEmptyInstitution = new Instutution { Id = 1, Name = null, Zip_Code = 4000, Address = "Lysalleen 31 " };
-        private Instutution _NameUnder5Institution = new Instutution { Id = 1, Name = "hele", Zip_Code = 400, Address = "Lysalleen 31 " };
-        private Instutution _NameOver15Institution = new Instutution { Id = 1, Name = "hele4hele4hele15", Zip_Code = 40000, Address = "Hej 31 " };
-        private Instutution _institutionWithLongZipCode = new Instutution { Id = 363, Name = "Raberparken", Zip_Code = 123446, Address = "Ukendt" };
-        private Instutution _instututionLessThan4 = new Instutution { Id = 23, Name = "Mosehaven", Zip_Code = 1, Address = "" };
-        private Instutution _instutution = new Instutution { Id = 1, Name = "Spirrebakken", Zip_Code = 4000, Address = "Lysalleen 31 " };
+        private Institution _institutionWithValidAddress = new Institution { Id = 1, Name = "Spirrebakken", Zip_Code = 4000, Address = "Lysalleen 31" };
+        private Institution _institutionWithEmptyAddress = new Institution { Id = 2, Name = "Mosehaven", Zip_Code = 5000, Address = "" };
+        private Institution _NameEmptyInstitution = new Institution { Id = 1, Name = null, Zip_Code = 4000, Address = "Lysalleen 31 " };
+        private Institution _NameUnder5Institution = new Institution { Id = 1, Name = "hele", Zip_Code = 400, Address = "Lysalleen 31 " };
+        private Institution _NameOver15Institution = new Institution { Id = 1, Name = "hele4hele4hele15", Zip_Code = 40000, Address = "Hej 31 " };
+        private Institution _institutionWithLongZipCode = new Institution { Id = 363, Name = "Raberparken", Zip_Code = 123446, Address = "Ukendt" };
+        private Institution _instututionLessThan4 = new Institution { Id = 23, Name = "Mosehaven", Zip_Code = 1, Address = "" };
+        private Institution _instutution = new Institution { Id = 1, Name = "Spirrebakken", Zip_Code = 4000, Address = "Lysalleen 31 " };
 
 
 

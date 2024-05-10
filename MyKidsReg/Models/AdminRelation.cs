@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 namespace MyKidsReg.Models;
 
 [Keyless]
-[Table("AdminRelation")]
 public partial class AdminRelation
 {
     public int User_Id { get; set; }
@@ -17,8 +16,5 @@ public partial class AdminRelation
     public int Institution_Id { get; set; }
 
     [ForeignKey("Institution_Id")]
-    public virtual Instutution Institution { get; set; }
-
-    [ForeignKey("User_Id")]
-    public virtual User User { get; set; }
+    public virtual Institution Institution { get; set; }
 }

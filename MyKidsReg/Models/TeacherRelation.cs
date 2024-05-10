@@ -9,15 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace MyKidsReg.Models;
 
 [Keyless]
-public partial class ParentRelation
+public partial class TeacherRelation
 {
     public int User_id { get; set; }
 
-    public int Student_id { get; set; }
+    public int Department_id { get; set; }
 
-    [ForeignKey("Student_id")]
-    public virtual Student Student { get; set; }
-
-    [ForeignKey("User_id")]
-    public virtual User User { get; set; }
+    [ForeignKey("Department_id")]
+    public virtual Department Department { get; set; }
 }

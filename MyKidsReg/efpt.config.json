@@ -16,7 +16,7 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[AdminRelation]",
+         "Name": "[dbo].[AdminRelations]",
          "ObjectType": 0
       },
       {
@@ -24,7 +24,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Instutution]",
+         "Name": "[dbo].[Institution]",
          "ObjectType": 0
       },
       {
@@ -32,7 +32,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[ParentRelations]",
+         "Name": "[dbo].[ParentsRelations]",
          "ObjectType": 0
       },
       {
@@ -44,7 +44,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[TecherRelations]",
+         "Name": "[dbo].[TeacherRelations]",
          "ObjectType": 0
       },
       {

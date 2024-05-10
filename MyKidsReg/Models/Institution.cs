@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
 
-[Table("Instutution")]
-public partial class Instutution
+[Table("Institution")]
+public partial class Institution
 {
     [Key]
     public int Id { get; set; }
@@ -24,9 +24,13 @@ public partial class Instutution
     public string Address { get; set; }
 
     public int Zip_Code { get; set; }
+
+    public long? Tlf_Number { get; set; }
+
     [JsonIgnore]
     [InverseProperty("Institution")]
     public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
+
     [JsonIgnore]
     [InverseProperty("Intitution")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();

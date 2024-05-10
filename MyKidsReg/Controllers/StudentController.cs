@@ -44,18 +44,14 @@ namespace MyKidsReg.Controllers
         public async Task<IActionResult> CreateStudent(Student newStudent)
         {
             if (ModelState.IsValid)
-            {
-                // Konverter nullable int? til int, hvis det er muligt
-                int departmentId = newStudent.Department_id ?? default(int);
+            {                         
+                               
+                await _service.CreateStudentAsync(newStudent);
 
-                // Opret ny student i databasen
-                await _service.CreatePersonAsync(newStudent.Name, newStudent.Last_name, newStudent.Birthday, departmentId);
-
-                // Returner en HTTP 200 OK respons
+                
                 return Ok(newStudent);
             }
-
-            // Returner en HTTP 400 BadRequest respons hvis modeltilstanden ikke er gyldig
+            
             return BadRequest(ModelState);
         }
 

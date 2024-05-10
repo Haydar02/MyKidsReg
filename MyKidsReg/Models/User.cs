@@ -56,12 +56,14 @@ public partial class User
     public long Mobil_nr { get; set; }
 
     public User_type Usertype { get; set; }
-    [JsonIgnore]
+
+    [JsonIgnore]  
     [InverseProperty("User")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
     [JsonIgnore]
     [NotMapped]
     public DateTime? TemporaryPasswordExpiration { get; set; }
+
 
     public bool IsTemporaryPasswordExpired()
     {
