@@ -1,4 +1,5 @@
-﻿using MyKidsReg.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MyKidsReg.Models;
 
 namespace MyKidsReg.Repositories
 {
@@ -9,61 +10,81 @@ namespace MyKidsReg.Repositories
         Task CreateParentRelations(ParentsRelation parentsRelation);
         Task UpdateParentRelations(int id, ParentsRelation parentsRelation);
         Task DeleteParentRelations(int id);
+        Task<bool> ParentRelationExist(int User_id, int Student_id);
     }
-    public class ParentRelationRepositories : IParentRelationsRepositories
+    public class ParentRelationRepository : IParentRelationsRepositories
     {
         private readonly MyKidsRegContext _context;
-        public ParentRelationRepositories(MyKidsRegContext context)
+        public ParentRelationRepository(MyKidsRegContext context)
         {
             _context = context;
         }
 
-        public async Task<List<Department>> GetAll()
+        public async Task<List<ParentsRelation>> GetAll()
         {
-            return await _context.Departments.ToListAsync();
+            return await _context.ParentRelations.ToListAsync();
         }
 
-        public async Task<Department> GetById(int id)
+        public async Task<ParentsRelation> GetById(int id)
         {
 
-            return await _context.Departments.FindAsync(id);
+            return await _context.ParentRelations.FindAsync(id);
         }
 
-        //public async Task<int> CreateAsync(string name, int Institution_id, bool saveChanges = true)
-        //{
-        //    var newDepartment = new Department
-        //    {
-        //        Name = name,
-        //        Institution_Id = Institution_id
-        //    };
-        //    _context.Departments.Add(newDepartment);
-
-        //    if (saveChanges)
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return newDepartment.Id;
-        //}
-
-        public async Task CreateDepartment(Department department)
+        public async Task CreateParentRelations(ParentsRelation newParentRelation)
         {
-            _context.Departments.Add(department);
-
-            _context.SaveChanges();
+            try
+            {
+                if (await ParentRelationExist(newParentRelation.User_id, newParentRelation.Student_id))
+                {
+                    throw new Exception("En bruger med det angivne User_Id eller Student_id findes allerede.");
+                }
+                _context.ParentRelations.Add(newParentRelation);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Her kan du logge fejlen eller give en brugervenlig besked
+                throw new Exception("Der opstod en fejl under oprettelse af Parent Relationen. Kontakt venligst systemadministratoren.");
+            }
         }
-        public async Task DeleteDepartment(int id)
+        public async Task DeleteParentRelations(int id)
         {
-            var item = await _context.Departments.FirstOrDefaultAsync(i => i.Id == id);
+            var item = await _context.ParentRelations.FirstOrDefaultAsync(i => i.User_id == id);
             if (item != null)
             {
-                _context.Departments.Remove(item);
+                _context.ParentRelations.Remove(item);
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task UpdateDepartment(int id, Department department)
+        public async Task UpdateParentRelations(int id, ParentsRelation parentsRelation)
         {
-            _context.Departments.Update(department);
+            _context.ParentRelations.Update(parentsRelation);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ParentRelationExist(int User_id, int Student_id)
+            {
+                try
+                {
+                    if (User_id != null)
+                    {
+                        return await _context.ParentRelations.AnyAsync(u => u.User_id == User_id);
+                    }
+                    else if (Student_id != null)
+                    {
+                        return await _context.ParentRelations.AnyAsync(u => u.Student_id == Student_id);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Fejl under kontrol af ParentRelation: {ex.Message}");
+                    throw;
+                }
+            }
+        }
     }
-}
