@@ -17,4 +17,7 @@ public partial class ParentsRelation
 
     [ForeignKey("Student_id")]
     public virtual Student Student { get; set; }
+
+    [ForeignKey("User_id")]
+    public virtual User User { get; set; }
 }

@@ -17,4 +17,7 @@ public partial class AdminRelation
 
     [ForeignKey("Institution_Id")]
     public virtual Institution Institution { get; set; }
+
+    [ForeignKey("User_Id")]
+    public virtual User User { get; set; }
 }

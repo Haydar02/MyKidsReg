@@ -31,6 +31,7 @@ public partial class Student
     [ForeignKey("Department_id")]
     [InverseProperty("Students")]
     public virtual Department Department { get; set; }
+
     public void NameValidate()
     {
         if (Name == null)
@@ -60,5 +61,4 @@ public partial class Student
         NameValidate();
         LastNameValidate();
     }
-
 }

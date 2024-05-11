@@ -121,7 +121,7 @@ namespace MyKidsReg.Services
         public async Task CreaateUser(string username, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
         {
             // string passwordHash = _passwordService.HashPassword(password);
-
+            string userTypeString = user_Type.ToText();
             var newUser = new User
             {
                 User_Name = username,
@@ -135,6 +135,7 @@ namespace MyKidsReg.Services
                 Usertype = user_Type
 
             };
+            newUser.UserValidate();
             string userTypeText = newUser.Usertype.ToText();
             Console.WriteLine($"User type: {userTypeText}");
             newUser.UsernameValidate();

@@ -46,6 +46,10 @@ public partial class MyKidsRegContext : DbContext
             entity.HasOne(d => d.Institution).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AdminRelation_Instutution1");
+
+            entity.HasOne(d => d.User).WithMany()
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_AdminRelations_Users");
         });
 
         modelBuilder.Entity<Department>(entity =>
@@ -68,7 +72,8 @@ public partial class MyKidsRegContext : DbContext
         modelBuilder.Entity<Message>(entity =>
         {
             entity.HasOne(d => d.Intitution).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Instutution");
-          
+
+            entity.HasOne(d => d.User).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Users");
         });
 
         modelBuilder.Entity<ParentsRelation>(entity =>
@@ -76,6 +81,10 @@ public partial class MyKidsRegContext : DbContext
             entity.HasOne(d => d.Student).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ParentsRelations_Student");
+
+            entity.HasOne(d => d.User).WithMany()
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ParentsRelations_Users");
         });
 
         modelBuilder.Entity<Student>(entity =>
@@ -97,6 +106,10 @@ public partial class MyKidsRegContext : DbContext
             entity.HasOne(d => d.Department).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TecherRelations_Department");
+
+            entity.HasOne(d => d.User).WithMany()
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TeacherRelations_Users");
         });
 
         OnModelCreatingPartial(modelBuilder);

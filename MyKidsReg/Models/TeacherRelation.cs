@@ -17,4 +17,7 @@ public partial class TeacherRelation
 
     [ForeignKey("Department_id")]
     public virtual Department Department { get; set; }
+
+    [ForeignKey("User_id")]
+    public virtual User User { get; set; }
 }

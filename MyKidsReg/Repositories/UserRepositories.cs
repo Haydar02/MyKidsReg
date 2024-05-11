@@ -6,9 +6,9 @@ namespace MyKidsReg.Repositories
 {
     public interface IUserRepository
     {
-        Task <List<User>> GetAll();
-        Task <User> GetUserById(int userId);
-        Task <User> GetUserByUsername(string username);
+        Task<List<User>> GetAll();
+        Task<User> GetUserById(int userId);
+        Task<User> GetUserByUsername(string username);
         Task CreateUser(User newUser);
         Task UpdateUser(User updateUser);
         Task DeleteUser(int userId);
@@ -31,6 +31,7 @@ namespace MyKidsReg.Repositories
                 {
                     throw new Exception("En bruger med det angivne brugernavn, e-mail eller mobilnumme findes allerede.");
                 }
+                string userTypeText = UserTypeToText(newUser.Usertype);
 
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
@@ -47,28 +48,28 @@ namespace MyKidsReg.Repositories
         public async Task DeleteUser(int userId)
         {
             var user = _context.Users.FirstOrDefault(u => u.User_Id == userId);
-            if(user != null)
+            if (user != null)
             {
                 _context.Users.Remove(user);
                 _context.SaveChanges();
             }
             else
             {
-                throw new Exception("Brugeren findes ikke "); 
+                throw new Exception("Brugeren findes ikke ");
             }
         }
 
-        public async Task< List< User>> GetAll()
+        public async Task<List<User>> GetAll()
         {
-           return _context.Users.ToList();
+            return _context.Users.ToList();
         }
 
-        public async Task <User?> GetUserById(int userId)
+        public async Task<User?> GetUserById(int userId)
         {
             return _context.Users.FirstOrDefault(u => u.User_Id == userId);
         }
 
-        public async Task <User?> GetUserByUsername(string username)
+        public async Task<User?> GetUserByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.User_Name == username);
         }
@@ -96,17 +97,32 @@ namespace MyKidsReg.Repositories
                 }
                 else
                 {
-                    return false; 
+                    return false;
                 }
             }
             catch (Exception ex)
             {
-                
+
                 Console.WriteLine($"Fejl under kontrol af brugerens eksistens: {ex.Message}");
-                throw; 
+                throw;
             }
         }
+        public string UserTypeToText(User_type userType)
+        {
+            switch (userType)
+            {
+                case User_type.Super_Admin :
+                    return "Super Admin";
+                case User_type.Admin:
+                    return "Admin";
+                case User_type.Padagogue:
+                    return "Padagogue";
+                case User_type.Parent:
+                    return "Parent";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(userType), userType, "Unsupported user type");
+            }
 
-
+        }
     }
 }
