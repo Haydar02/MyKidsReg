@@ -22,13 +22,13 @@ namespace MyKidsReg.Repositories
 
         public async Task<List<ParentsRelation>> GetAll()
         {
-            return await _context.ParentRelations.ToListAsync();
+            return await _context.ParentsRelations.ToListAsync();
         }
 
         public async Task<ParentsRelation> GetById(int id)
         {
 
-            return await _context.ParentRelations.FindAsync(id);
+            return await _context.ParentsRelations.FindAsync(id);
         }
 
         public async Task CreateParentRelations(ParentsRelation newParentRelation)
@@ -39,7 +39,7 @@ namespace MyKidsReg.Repositories
                 {
                     throw new Exception("En bruger med det angivne User_Id eller Student_id findes allerede.");
                 }
-                _context.ParentRelations.Add(newParentRelation);
+                _context.ParentsRelations.Add(newParentRelation);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -50,16 +50,16 @@ namespace MyKidsReg.Repositories
         }
         public async Task DeleteParentRelations(int id)
         {
-            var item = await _context.ParentRelations.FirstOrDefaultAsync(i => i.User_id == id);
+            var item = await _context.ParentsRelations.FirstOrDefaultAsync(i => i.User_id == id);
             if (item != null)
             {
-                _context.ParentRelations.Remove(item);
+                _context.ParentsRelations.Remove(item);
                 await _context.SaveChangesAsync();
             }
         }
         public async Task UpdateParentRelations(int id, ParentsRelation parentsRelation)
         {
-            _context.ParentRelations.Update(parentsRelation);
+            _context.ParentsRelations.Update(parentsRelation);
             await _context.SaveChangesAsync();
         }
 
@@ -69,11 +69,11 @@ namespace MyKidsReg.Repositories
                 {
                     if (User_id != null)
                     {
-                        return await _context.ParentRelations.AnyAsync(u => u.User_id == User_id);
+                        return await _context.ParentsRelations.AnyAsync(u => u.User_id == User_id);
                     }
                     else if (Student_id != null)
                     {
-                        return await _context.ParentRelations.AnyAsync(u => u.Student_id == Student_id);
+                        return await _context.ParentsRelations.AnyAsync(u => u.Student_id == Student_id);
                     }
                     else
                     {
