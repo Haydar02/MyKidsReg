@@ -4,6 +4,7 @@ using MyKidsReg.Repositories;
 using MyKidsReg.Services;
 using MyKidsReg.Services.CommunicationsServices;
 using System;
+using static MyKidsReg.Repositories.TeacherRelationsRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,12 @@ builder.Services.AddScoped<IinstitutionServices, InstitutionServices>();
 builder.Services.AddScoped<IinstitutionRepository, InstitutionRepositories>();
 builder.Services.AddScoped<IAdminRelationServices, AdminRelationServices>();
 builder.Services.AddScoped<IAdminRelationsRepositories, AdminRelationsRepository>();
+builder.Services.AddScoped<ITeacherRelationServices, TeacherRelationServices>();    
+builder.Services.AddScoped<ITeacherRelationsRepositories, TeacherRelationRepository>();
+builder.Services.AddScoped<IParentRelationServices, ParentRelationServices>();
+builder.Services.AddScoped<IParentRelationsRepositories, ParentRelationRepository>();
+builder.Services.AddScoped<IStudentLogServices, StudentLogServices>();
+builder.Services.AddScoped<IStudentLogRepositories, StudentLogRepositories>();
 
 var app = builder.Build();
 
