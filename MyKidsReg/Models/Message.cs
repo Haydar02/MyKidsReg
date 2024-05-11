@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MyKidsReg.Models;
 
@@ -33,4 +34,12 @@ public partial class Message
     [ForeignKey("User_id")]
     [InverseProperty("Messages")]
     public virtual User UserNavigation { get; set; }
+
+    public void DescriptionValidate()
+    {
+        if(string.IsNullOrEmpty(Description))
+        {
+            throw new ArgumentNullException("Beskrivelsen må ikke være tom");
+        }
+    }
 }
