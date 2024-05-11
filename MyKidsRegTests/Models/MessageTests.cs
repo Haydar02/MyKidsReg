@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyKidsReg.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,20 @@ namespace MyKidsReg.Models.Tests
     [TestClass()]
     public class MessageTests
     {
+        private Message _InvalidMessage = new Message { Description = "" };
+        private Message _ValidMessage = new Message { Description = "This is a valid description" };
+
         [TestMethod()]
-        public void DescriptionValidateTest()
+        public void DescriptionValidateTest_EmptyDescription()
         {
-            Assert.Fail();
+            _ValidMessage.DescriptionValidate();
+            Assert.ThrowsException<ArgumentNullException>(() => _InvalidMessage.DescriptionValidate());
+        }
+
+        [TestMethod()]
+        public void DescriptionValidateTest_ValidDescription()
+        {
+            _ValidMessage.DescriptionValidate(); 
         }
     }
 }
