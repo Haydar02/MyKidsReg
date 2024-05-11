@@ -30,6 +30,8 @@ builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
 builder.Services.AddScoped<IDepartmentRepositories, DepartmentRepositories>();
 builder.Services.AddScoped<IinstitutionServices, InstitutionServices>();
 builder.Services.AddScoped<IinstitutionRepository, InstitutionRepositories>();
+builder.Services.AddScoped<IAdminRelationServices, AdminRelationServices>();
+builder.Services.AddScoped<IAdminRelationsRepositories, AdminRelationsRepository>();
 
 var app = builder.Build();
 
