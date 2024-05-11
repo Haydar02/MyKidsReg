@@ -7,6 +7,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
+public enum Type_Log
+{
+    Arrived,
+    Gone,
+    Sick
+}
 
 [Keyless]
 [Table("StudentLog")]
@@ -17,7 +23,7 @@ public partial class StudentLog
     [Required]
     [StringLength(10)]
     [Unicode(false)]
-    public string Type { get; set; }
+    public Type_Log Type { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? Date { get; set; }

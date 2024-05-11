@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -28,6 +29,7 @@ public partial class Student
 
     public int? Department_id { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("Department_id")]
     [InverseProperty("Students")]
     public virtual Department Department { get; set; }

@@ -15,24 +15,26 @@ public partial class Institution
     [Key]
     public int Id { get; set; }
 
+    [Required]
     [StringLength(50)]
     [Unicode(false)]
     public string Name { get; set; }
 
+    [Required]
     [StringLength(255)]
     [Unicode(false)]
     public string Address { get; set; }
 
     public int Zip_Code { get; set; }
 
-    public long? Tlf_Number { get; set; }
+    public long Tlf_Number { get; set; }
 
     [JsonIgnore]
     [InverseProperty("Institution")]
     public virtual ICollection<Department> Departments { get; set; } = new List<Department>();
 
     [JsonIgnore]
-    [InverseProperty("Intitution")]
+    [InverseProperty("User")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 
     public void NameValidate()
@@ -72,4 +74,5 @@ public partial class Institution
         ZipCodeValidate();
         AddressValidate();
     }
+
 }

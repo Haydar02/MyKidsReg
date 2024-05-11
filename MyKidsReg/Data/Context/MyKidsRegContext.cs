@@ -45,7 +45,7 @@ public partial class MyKidsRegContext : DbContext
         {
             entity.HasOne(d => d.Institution).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_AdminRelation_Instutution1");
+                .HasConstraintName("FK_AdminRelations_Institution");
 
             entity.HasOne(d => d.User).WithMany()
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -58,22 +58,14 @@ public partial class MyKidsRegContext : DbContext
 
             entity.HasOne(d => d.Institution).WithMany(p => p.Departments)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Department_Instutution");
-        });
-
-        modelBuilder.Entity<Institution>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK_Instutution");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Zip_Code).ValueGeneratedOnAdd();
+                .HasConstraintName("FK_Department_Institution");
         });
 
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasOne(d => d.Intitution).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Instutution");
+            entity.HasOne(d => d.User).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Institution");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Users");
+            entity.HasOne(d => d.UserNavigation).WithMany(p => p.Messages).HasConstraintName("FK_Messages_Users");
         });
 
         modelBuilder.Entity<ParentsRelation>(entity =>

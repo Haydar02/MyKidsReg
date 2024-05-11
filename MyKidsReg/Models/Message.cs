@@ -26,11 +26,11 @@ public partial class Message
 
     public int? Intitution_id { get; set; }
 
-    [ForeignKey("Intitution_id")]
+    [ForeignKey("User_id")]
     [InverseProperty("Messages")]
-    public virtual Institution Intitution { get; set; }
+    public virtual Institution User { get; set; }
 
     [ForeignKey("User_id")]
     [InverseProperty("Messages")]
-    public virtual User User { get; set; }
+    public virtual User UserNavigation { get; set; }
 }
