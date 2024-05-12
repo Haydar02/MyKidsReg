@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,11 +12,24 @@ namespace MyKidsReg.Models;
 
 public partial class Message
 {
+    [NotMapped]
+    public DateTime CreatedAt { get; set; }
+
+    public Message()
+    {
+        CreatedAt = DateTime.UtcNow;
+        Date = DateOnly.FromDateTime(DateTime.UtcNow);
+        Time = TimeOnly.FromDateTime(DateTime.UtcNow);
+    }
+
+
     [Key]
     public int Message_id { get; set; }
 
+    [JsonIgnore]
     public DateOnly Date { get; set; }
 
+    [JsonIgnore]
     public TimeOnly Time { get; set; }
 
     [Required]
@@ -27,17 +41,19 @@ public partial class Message
 
     public int? Intitution_id { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("User_id")]
     [InverseProperty("Messages")]
     public virtual Institution User { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("User_id")]
     [InverseProperty("Messages")]
     public virtual User UserNavigation { get; set; }
 
     public void DescriptionValidate()
     {
-        if(string.IsNullOrEmpty(Description))
+        if (string.IsNullOrEmpty(Description))
         {
             throw new ArgumentNullException("Beskrivelsen må ikke være tom");
         }

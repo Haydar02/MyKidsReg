@@ -56,7 +56,7 @@ public partial class User
     public long Mobil_nr { get; set; }
 
     [Required]
-   // [StringLength(15)]
+    // [StringLength(15)]
     [Unicode(false)]
     public User_type Usertype { get; set; }
 
@@ -141,7 +141,7 @@ public partial class User
             throw new ArgumentException("Mobilnummeret skal starte med '0' eller '+'");
         }
     }
-    
+
 
     public void PasswordValidate()
     {

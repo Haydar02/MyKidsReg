@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -15,9 +16,10 @@ public partial class AdminRelation
 
     public int Institution_Id { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("Institution_Id")]
     public virtual Institution Institution { get; set; }
-
+    [JsonIgnore]
     [ForeignKey("User_Id")]
     public virtual User User { get; set; }
 }

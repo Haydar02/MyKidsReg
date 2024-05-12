@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
@@ -15,9 +16,10 @@ public partial class ParentsRelation
 
     public int Student_id { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("Student_id")]
     public virtual Student Student { get; set; }
-
+    [JsonIgnore]
     [ForeignKey("User_id")]
     public virtual User User { get; set; }
 }

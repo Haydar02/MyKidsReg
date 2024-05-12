@@ -39,6 +39,8 @@ builder.Services.AddScoped<IParentRelationServices, ParentRelationServices>();
 builder.Services.AddScoped<IParentRelationsRepositories, ParentRelationRepository>();
 builder.Services.AddScoped<IStudentLogServices, StudentLogServices>();
 builder.Services.AddScoped<IStudentLogRepositories, StudentLogRepositories>();
+builder.Services.AddScoped<IMessageRepositories,MessageRepositories>();
+builder.Services.AddScoped<IMessageServices, MessageServices>();
 
 var app = builder.Build();
 
