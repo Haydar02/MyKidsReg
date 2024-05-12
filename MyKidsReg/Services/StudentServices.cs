@@ -23,14 +23,14 @@ namespace MyKidsReg.Services
 
         public async Task<Student> CreateStudentAsync(Student newStudent)
         {
-          return await _rep.CreateAsync(newStudent);
-            
+          return await _rep.CreateAsync(newStudent);            
             
         }
 
 
         public async Task DeleteStudent(int id)
         {
+            
            await _rep.DeleteStudent(id);
         }
 
@@ -47,7 +47,7 @@ namespace MyKidsReg.Services
         public async Task UpdateStudents(int id, Student update)
         {
             var existingStudent = await _rep.GetByID(id);
-            if (existingStudent != null)
+            if (existingStudent == null)
             {
                 throw new InvalidOperationException($"Barnet med denne {id} findes ikke !!!");
 

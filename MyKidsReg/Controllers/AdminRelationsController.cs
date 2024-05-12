@@ -56,7 +56,8 @@ namespace MyKidsReg.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] AdminRelation adminRelation)
         {
-            if (id != adminRelation.User_Id)
+
+            if (id != adminRelation.Id)
             {
                 return BadRequest();
             }
@@ -68,15 +69,18 @@ namespace MyKidsReg.Controllers
             {
                 return NotFound(e.Message);
             }
-            return NoContent();
+            return Ok();
         }
 
         // DELETE api/<AdminRelationsController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var foundItem = await _service.GetById(id);
+            if (foundItem == null)
+            { return NotFound(); }
             await _service.DeleteAdminRelations(id);
-            return NoContent();
+            return Ok(foundItem);
         }
     }
 }

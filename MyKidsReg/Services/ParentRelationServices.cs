@@ -31,6 +31,11 @@ namespace MyKidsReg.Services
 
         public async Task DeleteParentRelations(int id)
         {
+            var foundRelation = await _rep.GetById(id);
+            if(foundRelation == null)
+            {
+                throw new OperationCanceledException("Anulleret ");
+            }
             await _rep.DeleteParentRelations(id);
         }
 

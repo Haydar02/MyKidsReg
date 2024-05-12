@@ -41,13 +41,16 @@ public partial class MyKidsRegContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.Entity<AdminRelation>(entity =>
         {
-            entity.HasOne(d => d.Institution).WithMany()
+            entity.HasKey(e => e.Id).HasName("PK__AdminRel__3214EC0725F0A12E");
+
+            entity.HasOne(d => d.Institution).WithMany(p => p.AdminRelations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AdminRelations_Institution");
 
-            entity.HasOne(d => d.User).WithMany()
+            entity.HasOne(d => d.User).WithMany(p => p.AdminRelations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AdminRelations_Users");
         });
@@ -70,11 +73,13 @@ public partial class MyKidsRegContext : DbContext
 
         modelBuilder.Entity<ParentsRelation>(entity =>
         {
-            entity.HasOne(d => d.Student).WithMany()
+            entity.HasKey(e => e.Id).HasName("PK__ParentsR__3214EC074B19E448");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.ParentsRelations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ParentsRelations_Student");
 
-            entity.HasOne(d => d.User).WithMany()
+            entity.HasOne(d => d.User).WithMany(p => p.ParentsRelations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ParentsRelations_Users");
         });
@@ -88,18 +93,22 @@ public partial class MyKidsRegContext : DbContext
 
         modelBuilder.Entity<StudentLog>(entity =>
         {
-            entity.HasOne(d => d.Student).WithMany()
+            entity.HasKey(e => e.id).HasName("PK__StudentL__3213E83FB37CD9D0");
+
+            entity.HasOne(d => d.Student).WithMany(p => p.StudentLogs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_StudentLog_Student");
         });
 
         modelBuilder.Entity<TeacherRelation>(entity =>
         {
-            entity.HasOne(d => d.Department).WithMany()
+            entity.HasKey(e => e.Id).HasName("PK__TeacherR__3214EC07AB1F8265");
+
+            entity.HasOne(d => d.Department).WithMany(p => p.TeacherRelations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TecherRelations_Department");
 
-            entity.HasOne(d => d.User).WithMany()
+            entity.HasOne(d => d.User).WithMany(p => p.TeacherRelations)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_TeacherRelations_Users");
         });

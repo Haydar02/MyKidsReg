@@ -59,19 +59,24 @@ namespace MyKidsReg.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult >UpdateUser(int id, User user)
         {
-            if(id == user.User_Id)
+            if(id != user.User_Id)
             {
                 return BadRequest();
             }
           await _userService.UpdateUser(id, user);
-            return NoContent();
+            return Ok();
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _userService.DeleteUser(id);
+            var foundUser = await _userService.GetUserByID(id);
+            if(foundUser != null)
+            {
+                await _userService.DeleteUser(id);
+            }
+           
             return NoContent();
         }
     }

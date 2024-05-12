@@ -74,8 +74,13 @@ namespace MyKidsReg.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var result = await _service.GetById(id);
+            if(result == null)
+            {
+                return NotFound();
+            }
             await _service.DeleteParentRelations(id);
-            return NoContent();
+            return Ok(result);
         }
     }
 }

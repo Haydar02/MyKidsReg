@@ -4,20 +4,25 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
 
-[Keyless]
 public partial class TeacherRelation
 {
+    [Key]
+    public int Id { get; set; }
+
     public int User_id { get; set; }
 
     public int Department_id { get; set; }
-
+    [JsonIgnore]
     [ForeignKey("Department_id")]
+    [InverseProperty("TeacherRelations")]
     public virtual Department Department { get; set; }
-
+    [JsonIgnore]
     [ForeignKey("User_id")]
+    [InverseProperty("TeacherRelations")]
     public virtual User User { get; set; }
 }

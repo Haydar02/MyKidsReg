@@ -56,7 +56,7 @@ namespace MyKidsReg.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] TeacherRelation teacherRelation)
         {
-            if (id != teacherRelation.User_id)
+            if (id != teacherRelation.Id)
             {
                 return BadRequest();
             }
@@ -75,7 +75,14 @@ namespace MyKidsReg.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteTeacherRelations(id);
+            var foundRelation = await _service.GetById(id);
+            if (foundRelation != null)
+            {
+                await _service.DeleteTeacherRelations(id);
+                return Ok(foundRelation);
+            }
+
+            
             return NoContent();
         }
     }

@@ -26,6 +26,11 @@ namespace MyKidsReg.Services
 
         public async Task DeleteAdminRelations(int id)
         {
+            var foundItem = await _rep.GetById(id);
+            if (foundItem == null)
+            {
+                throw new OperationCanceledException($"Det findes ikke en adminrelation med ID:{foundItem}");
+            }
             await _rep.DeleteAdminRelations(id);
         }
 
@@ -42,11 +47,13 @@ namespace MyKidsReg.Services
         public async Task UpdateAdminRelations(int id, AdminRelation update)
         {
             var existingadminRelation = await _rep.GetById(id);
-            if (existingadminRelation != null)
+            if (existingadminRelation == null)
             {
                 throw new InvalidOperationException($"AdminRelation findes allerede med dette {id}!!!");
             }
-            existingadminRelation.Institution_Id = update.Institution_Id;
+            existingadminRelation.Id= update.Id;
+            existingadminRelation.User_Id= update.User_Id;
+            existingadminRelation.Institution_Id= update.Institution_Id;
 
             await _rep.UpdateAdminRelations(id,existingadminRelation);
         }

@@ -23,8 +23,19 @@ namespace MyKidsReg.Repositories
 
         public async Task<Student> CreateAsync(Student newStudent)
         {
-            _context.Students.Add(newStudent);
-            await _context.SaveChangesAsync();
+            try
+            {
+                if(await StudentExist(newStudent.Name, newStudent.Last_name, newStudent.Birthday))
+                {
+                    throw new Exception("Barnet er allerede registreret");
+                }
+                _context.Students.Add(newStudent);
+                await _context.SaveChangesAsync();
+            }catch (Exception ex)
+            {
+                throw ex;
+            }
+           
 
             return newStudent;
 
@@ -32,14 +43,25 @@ namespace MyKidsReg.Repositories
 
         public async Task DeleteStudent(int id)
         {
-            var item = await _context.Students.FirstOrDefaultAsync(i =>i.Id == id);
-            if (item != null)
+            var student = await _context.Students
+                                        .Include(s => s.ParentsRelations)
+                                        .FirstOrDefaultAsync(s => s.Id == id);
+
+            if (student == null)
             {
-                _context.Students.Remove(item);
-                await _context.SaveChangesAsync();
+                throw new Exception($"Barnet med denne ID: {id} ikke findes.");
             }
+
            
+            if (student.ParentsRelations.Any())
+            {
+                throw new Exception($"systemet kan ikke slette barnet med denne ID: {id} fordi den har en relation til forældre.");
+            }
+
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
         }
+
 
         public async Task<List<Student>> GetAll()
         {
@@ -55,6 +77,31 @@ namespace MyKidsReg.Repositories
         {
            _context.Students.Update(student);
             await _context.SaveChangesAsync();
+        }
+        public async Task<bool> StudentExist(string Name, String last_name,string birthday)
+        {
+            try
+            {
+                if (Name != null)
+                {
+                    return await _context.Students.AnyAsync(s => s.Name == Name);
+                }
+                else if (last_name != null) 
+                {
+                    return await _context.Students.AnyAsync(l => l.Last_name == last_name);
+                }
+                else if (birthday != null)
+                {
+                    return await _context.Students.AnyAsync(d => d.Birthday == birthday);
+                }
+                else
+                {
+                    return false;
+                }
+            }catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

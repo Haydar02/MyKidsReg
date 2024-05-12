@@ -30,11 +30,22 @@ namespace MyKidsReg.Repositories
             return await _context.Institutions.FindAsync(id);
         }
 
-        public async Task CreateInstitution(Institution institution)
+        public async Task CreateInstitution(Institution newInstitution)
         {
-            _context.Institutions.Add(institution);
-
-            _context.SaveChanges();
+            try
+            {
+                if(await InsitutionExists(newInstitution.Name))
+                {
+                    throw new Exception("En ny institution med det angivne navn findes allerede.");
+                }
+               _context.Institutions.Add(newInstitution);
+               _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("forsøg igen med et andet navn");
+            }
+           
         }
         public async Task DeleteInstitution(int id)
         {
@@ -49,6 +60,27 @@ namespace MyKidsReg.Repositories
         {
             _context.Institutions.Update(instutution);
             await _context.SaveChangesAsync();
+        }
+        public async Task<bool> InsitutionExists(string Name)
+        {
+            try
+            {
+                if (Name != null)
+                {
+                    return await _context.Institutions.AnyAsync(i => i.Name ==Name );
+                }
+               
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Fejl under kontrol af institution eksistens: {ex.Message}");
+                throw;
+            }
         }
     }
 }

@@ -41,16 +41,16 @@ namespace MyKidsReg.Services
 
         public async Task UpdateInstitution(int id, Institution update)
         {
-            var existingInstitution = await _rep.GetById(id);
-            if (existingInstitution != null)
+            var foundIns = await _rep.GetById(id);
+            if (foundIns == null)
             {
                 throw new InvalidOperationException($"Instutution findes allerede med dette {id}!!!");
             }
-            existingInstitution.Name = update.Name;
-            existingInstitution.Address = update.Address;
-            existingInstitution.Zip_Code = update.Zip_Code;
+            foundIns.Name = update.Name;
+            foundIns.Address = update.Address;
+            foundIns.Zip_Code = update.Zip_Code;
 
-            await _rep.UpdateInstitution(id, existingInstitution);
+            await _rep.UpdateInstitution(id, foundIns);
         }
     }
 }

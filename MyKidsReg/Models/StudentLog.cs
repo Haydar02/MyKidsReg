@@ -4,21 +4,25 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
 
-[Keyless]
 [Table("StudentLog")]
 public partial class StudentLog
 {
+    [Key]
+    public int id { get; set; }
+
     public int Student_Id { get; set; }
 
     public int Type { get; set; }
 
     [Column(TypeName = "datetime")]
     public DateTime? Date { get; set; }
-
+    [JsonIgnore] 
     [ForeignKey("Student_Id")]
+    [InverseProperty("StudentLogs")]
     public virtual Student Student { get; set; }
 }

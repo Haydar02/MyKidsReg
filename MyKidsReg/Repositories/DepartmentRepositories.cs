@@ -30,28 +30,26 @@ namespace MyKidsReg.Repositories
 
             return await _context.Departments.FindAsync(id);
         }
+        
 
-        //public async Task<int> CreateAsync(string name, int Institution_id, bool saveChanges = true)
-        //{
-        //    var newDepartment = new Department
-        //    {
-        //        Name = name,
-        //        Institution_Id = Institution_id
-        //    };
-        //    _context.Departments.Add(newDepartment);
-
-        //    if (saveChanges)
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return newDepartment.Id;
-        //}
-
-        public async Task CreateDepartment(Department department)
+        public async Task CreateDepartment(Department newdepartment)
         {
-            _context.Departments.Add(department);
+            try
+            {
+                if(await DepartmentExists(newdepartment.Name, newdepartment.Institution_Id))
+                {
+                    throw new Exception("En adeling med det angivne navn findes allerede.");
 
-            _context.SaveChanges();
+                }
+                _context.Departments.Add(newdepartment);
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
         public async Task DeleteDepartment(int id)
         {
@@ -66,6 +64,31 @@ namespace MyKidsReg.Repositories
         {
             _context.Departments.Update(department);
             await _context.SaveChangesAsync();
+        }
+        public async Task<bool> DepartmentExists(string Name, int Id)
+        {
+            try
+            {
+                if (Name != null)
+                {
+                    return await _context.Departments.AnyAsync(u => u.Name == Name);
+                }
+                else if (Id != 0)
+                {
+                    return await _context.Departments.AnyAsync(d => d.Institution_Id == Id);
+                }
+               
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine($"Fejl under kontrol af brugerens eksistens: {ex.Message}");
+                throw;
+            }
         }
     }
 }

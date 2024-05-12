@@ -61,8 +61,17 @@ public partial class User
     public User_type Usertype { get; set; }
 
     [JsonIgnore]
+    [InverseProperty("User")]
+    public virtual ICollection<AdminRelation> AdminRelations { get; set; } = new List<AdminRelation>();
+    [JsonIgnore]
     [InverseProperty("UserNavigation")]
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+    [JsonIgnore]
+    [InverseProperty("User")]
+    public virtual ICollection<ParentsRelation> ParentsRelations { get; set; } = new List<ParentsRelation>();
+    [JsonIgnore]
+    [InverseProperty("User")]
+    public virtual ICollection<TeacherRelation> TeacherRelations { get; set; } = new List<TeacherRelation>();
 
     [JsonIgnore]
     [NotMapped]

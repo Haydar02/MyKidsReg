@@ -52,7 +52,7 @@ namespace MyKidsReg.Repositories
 
         public async Task DeleteAdminRelations(int id)
         {
-            var item = await _context.AdminRelations.FirstOrDefaultAsync(i => i.User_Id == id);
+            var item = await _context.AdminRelations.FirstOrDefaultAsync(i => i.Id == id);
             if (item != null)
             {
                 _context.AdminRelations.Remove(item);
@@ -61,6 +61,7 @@ namespace MyKidsReg.Repositories
         }
         public async Task UpdateAdminRelations(int id, AdminRelation adminRelation)
         {
+            
             _context.AdminRelations.Update(adminRelation);
             await _context.SaveChangesAsync();
         }

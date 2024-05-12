@@ -9,17 +9,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
 
-[Keyless]
 public partial class AdminRelation
 {
+    [Key]
+    public int Id { get; set; }
+
     public int User_Id { get; set; }
 
     public int Institution_Id { get; set; }
 
     [JsonIgnore]
     [ForeignKey("Institution_Id")]
+    [InverseProperty("AdminRelations")]
     public virtual Institution Institution { get; set; }
     [JsonIgnore]
     [ForeignKey("User_Id")]
+    [InverseProperty("AdminRelations")]
     public virtual User User { get; set; }
 }

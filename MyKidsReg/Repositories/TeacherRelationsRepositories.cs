@@ -52,7 +52,7 @@ namespace MyKidsReg.Repositories
             }
             public async Task DeleteTeacherRelations(int id)
             {
-                var item = await _context.TeacherRelations.FirstOrDefaultAsync(i => i.User_id == id);
+                var item = await _context.TeacherRelations.FirstOrDefaultAsync(i => i.Id == id);
                 if (item != null)
                 {
                     _context.TeacherRelations.Remove(item);

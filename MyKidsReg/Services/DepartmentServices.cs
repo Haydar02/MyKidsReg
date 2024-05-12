@@ -43,7 +43,7 @@ namespace MyKidsReg.Services
         public async Task UpdateDepartment(int id, Department update)
         {
         var existingDepartment = await _rep.GetById(id);
-            if (existingDepartment != null)
+            if (existingDepartment == null)
             {
                 throw new InvalidOperationException($"Departmentet findes allerede med dette {id}!!!");
             }

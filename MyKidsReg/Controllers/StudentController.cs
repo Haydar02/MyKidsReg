@@ -80,8 +80,16 @@ namespace MyKidsReg.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _service.DeleteStudent(id);
-            return NoContent();
+            var foundStudent = await _service.GetByID(id);
+            if (foundStudent != null)
+            {
+                await _service.DeleteStudent(id);
+
+            }
+
+            return Ok(foundStudent);
+          
+         
         }
     }
 }

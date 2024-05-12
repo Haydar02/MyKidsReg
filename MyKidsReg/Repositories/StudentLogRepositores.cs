@@ -47,7 +47,7 @@ namespace MyKidsReg.Repositories
             }
         }
         public async Task UpdateStudentLog(int id, StudentLog studentLog)
-        {
+        { 
             _context.StudentLogs.Update(studentLog);
             await _context.SaveChangesAsync();
         }

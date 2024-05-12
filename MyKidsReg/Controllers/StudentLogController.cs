@@ -56,7 +56,7 @@ namespace MyKidsReg.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] StudentLog studentLog)
         {
-            if (id != studentLog.Student_Id)
+            if (id != studentLog.id)
             {
                 return BadRequest();
             }

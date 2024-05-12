@@ -9,17 +9,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyKidsReg.Models;
 
-[Keyless]
 public partial class ParentsRelation
 {
+    [Key]
+    public int Id { get; set; }
+
     public int User_id { get; set; }
 
     public int Student_id { get; set; }
 
     [JsonIgnore]
     [ForeignKey("Student_id")]
+    [InverseProperty("ParentsRelations")]
     public virtual Student Student { get; set; }
     [JsonIgnore]
     [ForeignKey("User_id")]
+    [InverseProperty("ParentsRelations")]
     public virtual User User { get; set; }
 }

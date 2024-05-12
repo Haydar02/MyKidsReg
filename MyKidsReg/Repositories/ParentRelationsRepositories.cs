@@ -50,7 +50,7 @@ namespace MyKidsReg.Repositories
         }
         public async Task DeleteParentRelations(int id)
         {
-            var item = await _context.ParentsRelations.FirstOrDefaultAsync(i => i.User_id == id);
+            var item = await _context.ParentsRelations.FirstOrDefaultAsync(i => i.Id == id);
             if (item != null)
             {
                 _context.ParentsRelations.Remove(item);

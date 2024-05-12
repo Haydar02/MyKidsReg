@@ -29,7 +29,7 @@ namespace MyKidsReg.Repositories
         public async Task DeleteMessage(int id)
         {
             var foundMessage = await _context.Messages.FindAsync(id);
-            if(foundMessage == null)
+            if(foundMessage != null)
             {
                 _context.Messages.Remove(foundMessage);
                 await _context.SaveChangesAsync();

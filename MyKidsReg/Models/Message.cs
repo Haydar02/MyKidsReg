@@ -39,7 +39,7 @@ public partial class Message
 
     public int? User_id { get; set; }
 
-    public int? Intitution_id { get; set; }
+    public int? Institution_id { get; set; }
 
     [JsonIgnore]
     [ForeignKey("User_id")]
@@ -58,4 +58,5 @@ public partial class Message
             throw new ArgumentNullException("Beskrivelsen må ikke være tom");
         }
     }
+
 }

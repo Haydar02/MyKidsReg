@@ -32,6 +32,11 @@ namespace MyKidsReg.Services
 
         public async Task DeleteTeacherRelations(int id)
         {
+        var foundRelation = await _rep.GetById(id);
+        if (foundRelation == null)
+        {
+            throw new Exception("Relationen findes ikke ");
+        }
             await _rep.DeleteTeacherRelations(id);
         }
 
@@ -48,7 +53,7 @@ namespace MyKidsReg.Services
         public async Task UpdateTeacherRelations(int id, TeacherRelation update)
         {
             var existingTeacherRelation = await _rep.GetById(id);
-            if (existingTeacherRelation != null)
+            if (existingTeacherRelation == null)
             {
                 throw new InvalidOperationException($"Parent relationen findes ikke med dette {id}!!!");
             }
