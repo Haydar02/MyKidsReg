@@ -66,7 +66,7 @@ namespace MyKidsReg.Repositories
             _context.Students.RemoveRange(department.Students);
             _context.TeacherRelations.RemoveRange(department.TeacherRelations);
 
-            /
+            
             _context.Departments.Remove(department);
 
           

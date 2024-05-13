@@ -72,18 +72,36 @@ namespace MyKidsReg.Services
                 throw new Exception($"An error occurred while creating user: {ex.Message}");
             }
         }
+        public async Task<bool> ChangePasswordWithConfirmation(int userId, string newPassword, string confirmPassword)
+        {            
+            User user = await _rep.GetUserById(userId);
+
+            if (user != null)
+            {                
+                if (newPassword != confirmPassword)
+                {
+                   return false;
+                }
+                string newPasswordHash = _passwordService.HashPassword(newPassword);
+
+                user.Password = newPasswordHash;
+
+                await _rep.UpdateUser(user);
+
+                return true;
+            }
+
+            return false;
+        }
+
 
         public async Task<bool> PerformActionRequiringTemporaryPasswordExpirationCheck(int userId)
         {
-            // Hent brugeren fra databasen
             User user = await _rep.GetUserById(userId);
 
             // Kontroller om den midlertidige adgangskode er udløbet
             if (user != null && user.IsTemporaryPasswordExpired())
             {
-                // Håndter logikken for en udløbet midlertidig adgangskode
-                // For eksempel: Bloker brugeren eller bed dem om at nulstille adgangskoden
-
                 // Generer en ny midlertidig adgangskode
                 string newTemporaryPassword = GenerateTemporaryPassword();
 
@@ -96,18 +114,12 @@ namespace MyKidsReg.Services
                 // Gem ændringerne i databasen
                 await _rep.UpdateUser(user);
 
-                // Send den nye midlertidige adgangskode til brugeren (f.eks. via e-mail eller SMS)
+                // Send den nye midlertidige adgangskode til brugeren  via e-mail 
                 await _communication.SendTemporaryPassword(user.User_Name, newTemporaryPassword, "email");
-
-                // Fortsæt med at udføre handlingen, der kræver en gyldig midlertidig adgangskode
-                // ...
-
                 return true;
             }
 
-            // Fortsæt med at udføre handlingen, der kræver en gyldig midlertidig adgangskode
-            // ...
-
+           
             return true;
         }
 
