@@ -51,13 +51,9 @@ namespace MyKidsReg.Repositories
             {
                 throw new Exception($"Barnet med denne ID: {id} ikke findes.");
             }
-
-           
-            if (student.ParentsRelations.Any())
-            {
-                throw new Exception($"systemet kan ikke slette barnet med denne ID: {id} fordi den har en relation til forældre.");
-            }
-
+                      
+            
+            _context.ParentsRelations.RemoveRange(student.ParentsRelations);
             _context.Students.Remove(student);
             await _context.SaveChangesAsync();
         }

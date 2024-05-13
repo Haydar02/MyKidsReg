@@ -52,14 +52,27 @@ namespace MyKidsReg.Repositories
             
         }
         public async Task DeleteDepartment(int id)
-        {
-            var item = await _context.Departments.FirstOrDefaultAsync(i => i.Id == id);
-            if (item != null)
+        {           
+            var department = await _context.Departments
+                .Include(d => d.Students)
+                .Include(d => d.TeacherRelations)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (department == null)
             {
-                _context.Departments.Remove(item);
-                await _context.SaveChangesAsync();
+                throw new Exception("Afdelingen findes ikke");
             }
+           
+            _context.Students.RemoveRange(department.Students);
+            _context.TeacherRelations.RemoveRange(department.TeacherRelations);
+
+            /
+            _context.Departments.Remove(department);
+
+          
+            await _context.SaveChangesAsync();
         }
+
         public async Task UpdateDepartment(int id, Department department)
         {
             _context.Departments.Update(department);
