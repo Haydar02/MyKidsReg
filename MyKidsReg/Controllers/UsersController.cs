@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using MyKidsReg.Models;
 using MyKidsReg.Services;
 using MyKidsReg.Services.CommunicationsServices;
@@ -7,6 +8,7 @@ using MyKidsReg.Services.CommunicationsServices;
 
 namespace MyKidsReg.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -22,7 +24,31 @@ namespace MyKidsReg.Controllers
             _logger = logger;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(UserLoginDTO loginDto)
+        {
+            try
+            {
+                // Få brugeren baseret på brugernavn og adgangskode
+                var user = await _userService.GetUserByUsernameAndPassword(loginDto.Username, loginDto.Password);
 
+                if (user != null)
+                {
+                    // Brugeren blev fundet, så send en succesrespons
+                    return Ok(new { message = "Login successful", user });
+                }
+                else
+                {
+                    // Brugeren blev ikke fundet, send en fejlrespons
+                    return NotFound(new { message = "Invalid username or password" });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Der opstod en fejl under login-processen, send en fejlrespons
+                return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
+            }
+        }
         // GET: api/<UsersController>
         [HttpGet]
         public async Task<ActionResult <IEnumerable<User>>> Get()

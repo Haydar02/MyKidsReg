@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using MyKidsReg.Models;
 using MyKidsReg.Services;
 
@@ -6,6 +7,7 @@ using MyKidsReg.Services;
 
 namespace MyKidsReg.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class MessageController : ControllerBase

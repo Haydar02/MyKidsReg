@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MyKidsReg.Services.CommunicationsServices;
 
 namespace MyKidsReg.Models;
 public enum User_type
@@ -91,6 +93,16 @@ public partial class User
             // Midlertidig adgangskode er udløbet
             return true;
         }
+    }
+    public void HashPassword(PasswordService passwordService)
+    {
+        Password = passwordService.HashPassword(Password);
+    }
+
+    // Metode til at verificere en indtastet adgangskode
+    public bool VerifyPassword(PasswordService passwordService, string enteredPassword)
+    {
+        return passwordService.VerifyPassword(enteredPassword, Password);
     }
 
     public void UsernameValidate()

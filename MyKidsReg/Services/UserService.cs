@@ -20,7 +20,7 @@ namespace MyKidsReg.Services
             Task<User> GetUserByName(string username);
             Task UpdateUser(int id, User user);
             Task DeleteUser(int id);
-           
+        Task<User> GetUserByUsernameAndPassword(string username, string password);
         }
         public class UserService : IUserService
         {
@@ -161,6 +161,25 @@ namespace MyKidsReg.Services
         public async Task<User> GetUserByName(string username)
         {
             return await _rep.GetUserByUsername(username);
+        }
+
+        public async Task<User> GetUserByUsernameAndPassword(string username, string password)
+        {
+            // Først hent brugeren baseret på brugernavnet
+            var user = await _rep.GetUserByUsername(username);
+
+            // Hvis brugeren ikke blev fundet, returner null
+            if (user == null)
+                return null;
+
+            // Hvis brugeren blev fundet, skal vi validere adgangskoden
+            var passwordService = new PasswordService(); // Opret en instans af PasswordService
+
+            // Sammenlign den indtastede adgangskode med den gemte hash
+            if (passwordService.VerifyPassword(password, user.Password))
+                return user; // Returner brugeren, hvis adgangskoden er korrekt
+            else
+                return null; // Returner null, hvis adgangskoden er forkert
         }
 
         public async Task UpdateUser(int id, User update)
