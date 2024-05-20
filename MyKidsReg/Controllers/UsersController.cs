@@ -29,23 +29,35 @@ namespace MyKidsReg.Controllers
         {
             try
             {
-                // Få brugeren baseret på brugernavn og adgangskode
+                // Log besked før login-forsøget
+                _logger.LogInformation($"Attempting to login with username: {loginDto.Username}");
+
+                // Din login logik her...
                 var user = await _userService.GetUserByUsernameAndPassword(loginDto.Username, loginDto.Password);
 
                 if (user != null)
                 {
                     // Brugeren blev fundet, så send en succesrespons
+                    _logger.LogInformation("Login successful");
                     return Ok(new { message = "Login successful", user });
                 }
                 else
                 {
                     // Brugeren blev ikke fundet, send en fejlrespons
+                    _logger.LogInformation("Invalid username or password");
                     return NotFound(new { message = "Invalid username or password" });
                 }
+
+                // Log besked efter login-forsøget
+                _logger.LogInformation("Login attempt completed");
+
+                // Returner et passende svar til klienten
             }
             catch (Exception ex)
             {
-                // Der opstod en fejl under login-processen, send en fejlrespons
+                // Log fejlbesked i tilfælde af en exception
+                _logger.LogError(ex, "An error occurred during login");
+                // Returner et passende svar til klienten
                 return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
             }
         }
@@ -98,12 +110,12 @@ namespace MyKidsReg.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var foundUser = await _userService.GetUserByID(id);
-            if(foundUser != null)
+            if (foundUser != null)
             {
-                await _userService.DeleteUser(id);
+                await _userService.DeleteUser(id); 
+                return NoContent();
             }
-           
-            return NoContent();
+            return NotFound();
         }
     }
 }

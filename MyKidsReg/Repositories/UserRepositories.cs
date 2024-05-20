@@ -47,7 +47,6 @@ namespace MyKidsReg.Repositories
 
         public async Task DeleteUser(int userId)
         {
-            
             var user = await _context.Users
                 .Include(u => u.AdminRelations)
                 .Include(u => u.Messages)
@@ -55,23 +54,30 @@ namespace MyKidsReg.Repositories
                 .Include(u => u.TeacherRelations)
                 .FirstOrDefaultAsync(u => u.User_Id == userId);
 
-            if (user == null)
+            if (user != null)
+            {
+                try
+                {
+                    _context.AdminRelations.RemoveRange(user.AdminRelations);
+                    _context.Messages.RemoveRange(user.Messages);
+                    _context.ParentsRelations.RemoveRange(user.ParentsRelations);
+                    _context.TeacherRelations.RemoveRange(user.TeacherRelations);
+                    _context.Users.Remove(user);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine("Bruger og relaterede data blev slettet.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Fejl ved sletning: {ex.Message}");
+                    throw;
+                }
+            }
+            else
             {
                 throw new Exception("Brugeren findes ikke");
             }
-
-            
-            _context.AdminRelations.RemoveRange(user.AdminRelations);
-            _context.Messages.RemoveRange(user.Messages);
-            _context.ParentsRelations.RemoveRange(user.ParentsRelations);
-            _context.TeacherRelations.RemoveRange(user.TeacherRelations);
-
-          
-            _context.Users.Remove(user);
-
-           
-            await _context.SaveChangesAsync();
         }
+
 
         public async Task<List<User>> GetAll()
         {

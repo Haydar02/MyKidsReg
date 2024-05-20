@@ -203,7 +203,7 @@ namespace MyKidsReg.Services
 
         public async Task DeleteUser(int id)
         {
-            _rep.DeleteUser(id);
+           await _rep.DeleteUser(id);
         }
 
         public async Task < List< User>> GetAlle()
