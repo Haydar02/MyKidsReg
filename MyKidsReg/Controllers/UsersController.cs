@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyKidsReg.Models;
 using MyKidsReg.Services;
 using MyKidsReg.Services.CommunicationsServices;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +32,9 @@ namespace MyKidsReg.Controllers
             {
                 // Log besked før login-forsøget
                 _logger.LogInformation($"Attempting to login with username: {loginDto.Username}");
+
+                // Log indholdet af loginDto-objektet
+                _logger.LogInformation($"Received login data: {JsonConvert.SerializeObject(loginDto)}");
 
                 // Din login logik her...
                 var user = await _userService.GetUserByUsernameAndPassword(loginDto.Username, loginDto.Password);
