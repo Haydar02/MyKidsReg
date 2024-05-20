@@ -43,7 +43,16 @@ namespace MyKidsReg.Controllers
                 {
                     // Brugeren blev fundet, så send en succesrespons
                     _logger.LogInformation("Login successful");
-                    return Ok(new { message = "Login successful", user });
+
+                    // Returner kun de nødvendige data, herunder usertype
+                    var response = new
+                    {
+                        username = user.User_Name,
+                        name = user.Name,
+                        usertype = user.Usertype // Sørg for at denne linje er korrekt og returnerer den forventede værdi
+                    };
+
+                    return Ok(response);
                 }
                 else
                 {
@@ -51,11 +60,6 @@ namespace MyKidsReg.Controllers
                     _logger.LogInformation("Invalid username or password");
                     return NotFound(new { message = "Invalid username or password" });
                 }
-
-                // Log besked efter login-forsøget
-                _logger.LogInformation("Login attempt completed");
-
-                // Returner et passende svar til klienten
             }
             catch (Exception ex)
             {
@@ -65,6 +69,8 @@ namespace MyKidsReg.Controllers
                 return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
             }
         }
+
+
         // GET: api/<UsersController>
         [HttpGet]
         public async Task<ActionResult <IEnumerable<User>>> Get()
@@ -74,6 +80,7 @@ namespace MyKidsReg.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
+       
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await _userService.GetUserByID(id);
@@ -81,10 +88,25 @@ namespace MyKidsReg.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+
+            // Return user with all necessary fields
+            var response = new
+            {
+                user.User_Id,
+                user.User_Name,
+                user.Name,
+                user.Last_name,
+                user.Address,
+                user.Zip_code,
+                user.E_mail,
+                user.Mobil_nr,
+                user.Usertype // Ensure this field is included and correctly mapped
+            };
+
+            return Ok(response);
         }
 
-        
+
         // POST api/<UsersController>
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
