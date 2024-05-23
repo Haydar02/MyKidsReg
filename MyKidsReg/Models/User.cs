@@ -174,26 +174,26 @@ public partial class User
         {
             throw new ArgumentOutOfRangeException("Adgangskoden skal være mellem 4 og 9 tegn langt");
         }
-    }
-    public void UserTypeValidate()
-    {
-        if (!Enum.IsDefined(typeof(User_type), Usertype))
+        }
+        //public void UserTypeValidate()
+        //{
+        //    if (!Enum.IsDefined(typeof(User_type), Usertype))
+        //    {
+        //        throw new ArgumentOutOfRangeException("Usertype is not a valid value.");
+        //    }
+        //}
+
+        public void UserValidate()
         {
-            throw new ArgumentOutOfRangeException("Usertype is not a valid value.");
+            UsernameValidate();
+            ZipCodeValidate();
+            PhoneNrValidate();
+            // PasswordValidate();
+            AddressValidate();
+            EmailValidate();
+            //UserTypeValidate();
         }
     }
-
-    public void UserValidate()
-    {
-        UsernameValidate();
-        ZipCodeValidate();
-        PhoneNrValidate();
-        PasswordValidate();
-        AddressValidate();
-        EmailValidate();
-        UserTypeValidate();
-    }
-}
 public static class UserExtensions
 {
     public static string ToText(this User_type userType)

@@ -18,7 +18,7 @@ namespace MyKidsReg.Services
             Task<User> GetUserByID(int id);
             Task<List<User>> GetAlle();
             Task<User> GetUserByName(string username);
-            Task UpdateUser(int id, User user);
+        Task UpdateUser(int id, UpdateUserDTO updateUserDto);
             Task DeleteUser(int id);
         Task<User> GetUserByUsernameAndPassword(string username, string password);
         }
@@ -146,10 +146,10 @@ namespace MyKidsReg.Services
                 Usertype = user_Type
 
             };
-            newUser.UserValidate();
+           // newUser.UserValidate();
             string userTypeText = newUser.Usertype.ToText();
             Console.WriteLine($"User type: {userTypeText}");
-            newUser.UsernameValidate();
+            //newUser.UsernameValidate();
            await _rep.CreateUser(newUser);
         }
 
@@ -182,24 +182,26 @@ namespace MyKidsReg.Services
                 return null; // Returner null, hvis adgangskoden er forkert
         }
 
-        public async Task UpdateUser(int id, User update)
+        public async Task UpdateUser(int id, UpdateUserDTO updateUserDto)
         {
             var existingUser = await _rep.GetUserById(id);
-            if (existingUser != null)
+            if (existingUser == null)
             {
-              existingUser.User_Name = update.User_Name;
-                existingUser.Password = update.Password;
-                existingUser.Name = update.Name;
-                existingUser.Last_name = update.Last_name;
-                existingUser.Address = update.Address;
-                existingUser.Zip_code = update.Zip_code;
-                existingUser.E_mail = update.E_mail;
-                existingUser.Mobil_nr = update.Mobil_nr;
-                existingUser.Usertype = update.Usertype;
-
-                _rep.UpdateUser(existingUser);
+                throw new Exception("User not found");
             }
+
+            existingUser.User_Name = updateUserDto.User_Name;
+            existingUser.Name = updateUserDto.Name;
+            existingUser.Last_name = updateUserDto.Last_name;
+            existingUser.Address = updateUserDto.Address;
+            existingUser.Zip_code = updateUserDto.Zip_code;
+            existingUser.E_mail = updateUserDto.E_mail;
+            existingUser.Mobil_nr = updateUserDto.Mobil_nr;
+            existingUser.Usertype = updateUserDto.Usertype;
+
+            await _rep.UpdateUser(existingUser);
         }
+
 
         public async Task DeleteUser(int id)
         {

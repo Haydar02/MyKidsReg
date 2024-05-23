@@ -40,13 +40,13 @@ builder.Services.AddScoped<IinstitutionServices, InstitutionServices>();
 builder.Services.AddScoped<IinstitutionRepository, InstitutionRepositories>();
 builder.Services.AddScoped<IAdminRelationServices, AdminRelationServices>();
 builder.Services.AddScoped<IAdminRelationsRepositories, AdminRelationsRepository>();
-builder.Services.AddScoped<ITeacherRelationServices, TeacherRelationServices>();    
+builder.Services.AddScoped<ITeacherRelationServices, TeacherRelationServices>();
 builder.Services.AddScoped<ITeacherRelationsRepositories, TeacherRelationRepository>();
 builder.Services.AddScoped<IParentRelationServices, ParentRelationServices>();
 builder.Services.AddScoped<IParentRelationsRepositories, ParentRelationRepository>();
 builder.Services.AddScoped<IStudentLogServices, StudentLogServices>();
 builder.Services.AddScoped<IStudentLogRepositories, StudentLogRepositories>();
-builder.Services.AddScoped<IMessageRepositories,MessageRepositories>();
+builder.Services.AddScoped<IMessageRepositories, MessageRepositories>();
 builder.Services.AddScoped<IMessageServices, MessageServices>();
 
 var app = builder.Build();
@@ -57,6 +57,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // Dette gør Swagger UI tilgængeligt på roden ("/")
+    });
+}
+app.UseRouting();
 app.UseCors("AllowAll");
 
 app.UseAuthorization();

@@ -120,16 +120,20 @@ namespace MyKidsReg.Controllers
 
 
         // PUT api/<UsersController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult >UpdateUser(int id, User user)
+     [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, UpdateUserDTO updateUserDto)
         {
-            if(id != user.User_Id)
+            try
             {
-                return BadRequest();
+                await _userService.UpdateUser(id, updateUserDto);
+                return NoContent();
             }
-          await _userService.UpdateUser(id, user);
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
