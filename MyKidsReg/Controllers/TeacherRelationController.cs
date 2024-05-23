@@ -9,6 +9,7 @@ namespace MyKidsReg.Controllers
 {
     [EnableCors("AllowAll")]
     [Route("api/[controller]")]
+    //URL: api/MyKidsReg
     [ApiController]
     public class TeacherRelationController : ControllerBase
     {

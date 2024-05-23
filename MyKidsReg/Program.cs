@@ -5,7 +5,7 @@ using MyKidsReg.Services;
 using MyKidsReg.Services.CommunicationsServices;
 using System;
 using static MyKidsReg.Repositories.TeacherRelationsRepositories;
-
+const string policyName = ("AllowAll");
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -50,22 +50,23 @@ builder.Services.AddScoped<IMessageRepositories, MessageRepositories>();
 builder.Services.AddScoped<IMessageServices, MessageServices>();
 
 var app = builder.Build();
-
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty; // Dette gør Swagger UI tilgængeligt på roden ("/")
-    });
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+//else
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+//        c.RoutePrefix = string.Empty; // Dette gør Swagger UI tilgængeligt på roden ("/")
+//    });
+//}
 app.UseRouting();
 app.UseCors("AllowAll");
 

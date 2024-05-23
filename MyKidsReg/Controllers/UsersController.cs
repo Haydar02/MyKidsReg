@@ -11,6 +11,7 @@ namespace MyKidsReg.Controllers
 {
     [EnableCors("AllowAll")]
     [Route("api/[controller]")]
+    //URL: api/MykidsReg
     [ApiController]
     public class UsersController : ControllerBase
     {
