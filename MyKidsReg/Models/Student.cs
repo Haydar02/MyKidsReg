@@ -43,11 +43,11 @@ public partial class Student
 
     public void NameValidate()
     {
-        if (Name == null)
+        if (string.IsNullOrEmpty(Name))
         {
             throw new ArgumentNullException("Navn skal angives.");
         }
-        else if (Name.Length < 2 || Name.Length > 15)
+        else if (Name.Length < 2 )
         {
             throw new ArgumentOutOfRangeException("Navn skal være mellem 2 og 15 tegn.");
         }
@@ -55,11 +55,11 @@ public partial class Student
 
     public void LastNameValidate()
     {
-        if (Last_name == null)
+        if (string.IsNullOrEmpty(Last_name))
         {
             throw new ArgumentNullException("Efternavn skal angives.");
         }
-        else if (Last_name.Length < 2 || Last_name.Length > 15)
+        else if (Last_name.Length < 2)
         {
             throw new ArgumentOutOfRangeException("Efternavn skal være mellem 2 og 15 tegn.");
         }

@@ -11,10 +11,6 @@ namespace MyKidsReg.Models.Tests
     [TestClass()]
     public class DepartmentTests
     {
-        [TestMethod()]
-        public void NameValidateTest()
-        {
-            Assert.Fail();
-        }
+        
     }
 }
