@@ -79,7 +79,9 @@ public partial class User
     [NotMapped]
     public DateTime? TemporaryPasswordExpiration { get; set; }
 
-
+    [JsonIgnore]
+    [NotMapped]
+    public bool IsTemporaryPassword { get; set; }
     public bool IsTemporaryPasswordExpired()
     {
         // Kontroller om der er en udløbstid og om den er større end den aktuelle tid

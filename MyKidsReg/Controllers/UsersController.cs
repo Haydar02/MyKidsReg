@@ -27,18 +27,18 @@ namespace MyKidsReg.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDTO loginDto)
+        public async Task<IActionResult> Login([FromBody] UserLoginDTO loginRequest)
         {
             try
             {
                 // Log besked før login-forsøget
-                _logger.LogInformation($"Attempting to login with username: {loginDto.Username}");
+                _logger.LogInformation($"Attempting to login with username: {loginRequest.Username}");
 
                 // Log indholdet af loginDto-objektet
-                _logger.LogInformation($"Received login data: {JsonConvert.SerializeObject(loginDto)}");
+                _logger.LogInformation($"Received login data: {JsonConvert.SerializeObject(loginRequest)}");
 
                 // Din login logik her...
-                var user = await _userService.GetUserByUsernameAndPassword(loginDto.Username, loginDto.Password);
+                var user = await _userService.GetUserByUsernameAndPassword(loginRequest.Username, loginRequest.Password);
 
                 if (user != null)
                 {
@@ -70,7 +70,23 @@ namespace MyKidsReg.Controllers
                 return StatusCode(500, new { message = "An error occurred during login", error = ex.Message });
             }
         }
+        [HttpPost("checkTemporaryPasswordExpiration")]
+        public async Task<IActionResult> CheckTemporaryPasswordExpiration([FromBody] int userId)
+        {
+            var result = await _userService.CheckTemporaryPasswordExpiration(userId);
+            return Ok(result);
+        }
 
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO changePasswordDTO)
+        {
+            var result = await _userService.ChangePassword(changePasswordDTO.UserId, changePasswordDTO.NewPassword, changePasswordDTO.ConfirmPassword);
+            if (result)
+            {
+                return Ok("Password changed successfully.");
+            }
+            return BadRequest("Failed to change password.");
+        }
 
         // GET: api/<UsersController>
         [HttpGet]
@@ -108,45 +124,80 @@ namespace MyKidsReg.Controllers
         }
 
 
-        // POST api/<UsersController>
         [HttpPost]
         public async Task<IActionResult> CreateUser(User user)
         {
-            await _userService.createUserWithTemporaryPassword(user.User_Name, user.Name,
-                                             user.Last_name, user.Address, user.Zip_code,
-                                             user.E_mail, user.Mobil_nr, user.Usertype);
+            try
+            {
+                // Valider indgående data
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            return CreatedAtAction(nameof(GetUserById), new { id = user.User_Id }, user);
+                // Opret bruger
+                await _userService.createUserWithTemporaryPassword(user.User_Name, user.Name,
+                                                 user.Last_name, user.Address, user.Zip_code,
+                                                 user.E_mail, user.Mobil_nr, user.Usertype);
+
+                // Returner en bekræftelsesbesked
+                return Ok(new { message = "Brugeren er oprettet med succes." });
+            }
+            catch (Exception ex)
+            {
+                // Log fejl og returner en fejlbesked
+                _logger.LogError(ex, "Fejl under oprettelse af bruger.");
+                return StatusCode(500, new { message = "Der opstod en fejl under oprettelse af bruger." });
+            }
         }
 
-
-        // PUT api/<UsersController>/5
-     [HttpPut("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UpdateUserDTO updateUserDto)
         {
             try
             {
+                // Valider indgående data
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Opdater bruger
                 await _userService.UpdateUser(id, updateUserDto);
-                return NoContent();
+
+                // Returner en bekræftelsesbesked eller opdaterede brugeroplysninger
+                return Ok(new { message = "Brugeren er opdateret med succes." });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                // Log fejl og returner en fejlbesked
+                _logger.LogError(ex, "Fejl under opdatering af bruger.");
+                return StatusCode(500, new { message = "Der opstod en fejl under opdatering af bruger." });
             }
         }
 
-
-        // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var foundUser = await _userService.GetUserByID(id);
-            if (foundUser != null)
+            try
             {
-                await _userService.DeleteUser(id); 
-                return NoContent();
+                // Slet bruger
+                var foundUser = await _userService.GetUserByID(id);
+                if (foundUser != null)
+                {
+                    await _userService.DeleteUser(id);
+                    // Returner en bekræftelsesbesked
+                    return Ok(new { message = "Brugeren er slettet med succes." });
+                }
+                return NotFound();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                // Log fejl og returner en fejlbesked
+                _logger.LogError(ex, "Fejl under sletning af bruger.");
+                return StatusCode(500, new { message = "Der opstod en fejl under sletning af bruger." });
+            }
         }
+
     }
 }

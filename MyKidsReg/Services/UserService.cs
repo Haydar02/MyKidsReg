@@ -7,34 +7,36 @@ using System.Numerics;
 
 namespace MyKidsReg.Services
 {
-     
-        public interface IUserService
-        {
+
+    public interface IUserService
+    {
+        Task<bool> CheckTemporaryPasswordExpiration(int userId);
+        Task<bool> ChangePassword(int userId, string newPassword, string confirmPassword);
         Task createUserWithTemporaryPassword(string username, string name, string last_name,
                                             string adress, int zip_code, string E_mail,
                                             long mobilNumber, User_type user_Type);
 
         Task CreaateUser(string username, string name, string last_name, string adress, int zip_code, string E_mail, long mobilNumber, User_type user_Type);
-            Task<User> GetUserByID(int id);
-            Task<List<User>> GetAlle();
-            Task<User> GetUserByName(string username);
+        Task<User> GetUserByID(int id);
+        Task<List<User>> GetAlle();
+        Task<User> GetUserByName(string username);
         Task UpdateUser(int id, UpdateUserDTO updateUserDto);
-            Task DeleteUser(int id);
+        Task DeleteUser(int id);
         Task<User> GetUserByUsernameAndPassword(string username, string password);
-        }
-        public class UserService : IUserService
-        {
-            private readonly IUserRepository _rep;
-            private readonly PasswordService _passwordService;
-            private readonly CommunicationService _communication;
-      
+    }
+    public class UserService : IUserService
+    {
+        private readonly IUserRepository _rep;
+        private readonly PasswordService _passwordService;
+        private readonly CommunicationService _communication;
+
 
         public UserService(IUserRepository rep, PasswordService passwordService, CommunicationService communication)
-            {
-                _rep = rep;
-                _passwordService = passwordService;
-                _communication = communication;
-            }
+        {
+            _rep = rep;
+            _passwordService = passwordService;
+            _communication = communication;
+        }
 
         public async Task createUserWithTemporaryPassword(string username, string name, string last_name,
                                                      string adress, int zip_code, string E_mail,
@@ -42,21 +44,21 @@ namespace MyKidsReg.Services
 
         {
             string temporaryPassword = GenerateTemporaryPassword();
-                string passwordHash = _passwordService.HashPassword(temporaryPassword);
+            string passwordHash = _passwordService.HashPassword(temporaryPassword);
 
-                var newUser = new User
-                {
-                    User_Name = username,
-                    Password = passwordHash,
-                    Name = name,
-                    Last_name = last_name,
-                    Address = adress,
-                    Zip_code = zip_code,
-                    E_mail = E_mail,
-                    Mobil_nr = mobilNumber,
-                    Usertype = user_Type
-                };
-            
+            var newUser = new User
+            {
+                User_Name = username,
+                Password = passwordHash,
+                Name = name,
+                Last_name = last_name,
+                Address = adress,
+                Zip_code = zip_code,
+                E_mail = E_mail,
+                Mobil_nr = mobilNumber,
+                Usertype = user_Type
+            };
+
 
             DateTime expirationTime = DateTime.Now.AddHours(5);
             newUser.TemporaryPasswordExpiration = expirationTime;
@@ -73,14 +75,14 @@ namespace MyKidsReg.Services
             }
         }
         public async Task<bool> ChangePasswordWithConfirmation(int userId, string newPassword, string confirmPassword)
-        {            
+        {
             User user = await _rep.GetUserById(userId);
 
             if (user != null)
-            {                
+            {
                 if (newPassword != confirmPassword)
                 {
-                   return false;
+                    return false;
                 }
                 string newPasswordHash = _passwordService.HashPassword(newPassword);
 
@@ -119,7 +121,7 @@ namespace MyKidsReg.Services
                 return true;
             }
 
-           
+
             return true;
         }
 
@@ -128,15 +130,15 @@ namespace MyKidsReg.Services
         {
             return Guid.NewGuid().ToString().Substring(0, 8);
         }
-       
 
-        public async Task CreaateUser(string username, string name, string last_name, string adress, int zip_code,string E_mail, long mobilNumber, User_type user_Type)
+
+        public async Task CreaateUser(string username, string name, string last_name, string adress, int zip_code, string E_mail, long mobilNumber, User_type user_Type)
         {
-           
+
             string userTypeString = user_Type.ToText();
             var newUser = new User
             {
-                User_Name = username,               
+                User_Name = username,
                 Name = name,
                 Last_name = last_name,
                 Address = adress,
@@ -146,14 +148,14 @@ namespace MyKidsReg.Services
                 Usertype = user_Type
 
             };
-           // newUser.UserValidate();
+            // newUser.UserValidate();
             string userTypeText = newUser.Usertype.ToText();
             Console.WriteLine($"User type: {userTypeText}");
             //newUser.UsernameValidate();
-           await _rep.CreateUser(newUser);
+            await _rep.CreateUser(newUser);
         }
 
-        public async Task< User> GetUserByID(int id)
+        public async Task<User> GetUserByID(int id)
         {
             return await _rep.GetUserById(id);
         }
@@ -165,22 +167,26 @@ namespace MyKidsReg.Services
 
         public async Task<User> GetUserByUsernameAndPassword(string username, string password)
         {
-            // Først hent brugeren baseret på brugernavnet
             var user = await _rep.GetUserByUsername(username);
 
-            // Hvis brugeren ikke blev fundet, returner null
             if (user == null)
                 return null;
 
-            // Hvis brugeren blev fundet, skal vi validere adgangskoden
-            var passwordService = new PasswordService(); // Opret en instans af PasswordService
+            var passwordService = new PasswordService();
 
-            // Sammenlign den indtastede adgangskode med den gemte hash
             if (passwordService.VerifyPassword(password, user.Password))
-                return user; // Returner brugeren, hvis adgangskoden er korrekt
+            {
+                // Set IsTemporaryPassword based on the expiration time of the temporary password
+                user.IsTemporaryPassword = user.TemporaryPasswordExpiration.HasValue && DateTime.Now < user.TemporaryPasswordExpiration;
+                return user;
+            }
             else
-                return null; // Returner null, hvis adgangskoden er forkert
+            {
+                return null;
+            }
         }
+
+
 
         public async Task UpdateUser(int id, UpdateUserDTO updateUserDto)
         {
@@ -205,12 +211,37 @@ namespace MyKidsReg.Services
 
         public async Task DeleteUser(int id)
         {
-           await _rep.DeleteUser(id);
+            await _rep.DeleteUser(id);
         }
 
-        public async Task < List< User>> GetAlle()
+        public async Task<List<User>> GetAlle()
         {
-            return  await _rep.GetAll();
+            return await _rep.GetAll();
         }
+        public async Task<bool> CheckTemporaryPasswordExpiration(int userId)
+        {
+            var user = await _rep.GetUserById(userId);
+            if (user != null)
+            {
+                return !user.IsTemporaryPasswordExpired();
+            }
+            return false;
+        }
+
+        public async Task<bool> ChangePassword(int userId, string newPassword, string confirmPassword)
+        {
+            var user = await _rep.GetUserById(userId);
+            if (user != null)
+            {
+                if (newPassword == confirmPassword)
+                {
+                    user.HashPassword(_passwordService); // Hash the new password
+                    await _rep.UpdateUser(user);
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
 }

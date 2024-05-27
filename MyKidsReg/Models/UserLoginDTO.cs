@@ -22,3 +22,11 @@ public class UpdateUserDTO
     public long Mobil_nr { get; set; }
     public User_type Usertype { get; set; }
 }
+// ChangePasswordDTO.cs
+
+public class ChangePasswordDTO
+{
+    public int UserId { get; set; }
+    public string NewPassword { get; set; }
+    public string ConfirmPassword { get; set; }
+}
