@@ -50,7 +50,8 @@ namespace MyKidsReg.Controllers
                     {
                         username = user.User_Name,
                         name = user.Name,
-                        usertype = user.Usertype // Sørg for at denne linje er korrekt og returnerer den forventede værdi
+                        usertype = user.Usertype, // Sørg for at denne linje er korrekt og returnerer den forventede værdi
+                        user_id = user.User_Id
                     };
 
                     return Ok(response);

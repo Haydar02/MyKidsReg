@@ -41,6 +41,17 @@ namespace MyKidsReg.Controllers
             return Ok(student);
         }
 
+        [HttpGet("student/{departmentId}")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetByUserId(int departmentId)
+        {
+            var department = await _service.GetByDepatmentId(departmentId);
+            if (department == null || !department.Any())
+            {
+                return NotFound();
+            }
+            return Ok(department);
+        }
+
         // POST api/<StudentController>
         [HttpPost]
         public async Task<IActionResult> CreateStudent(Student newStudent)
@@ -90,8 +101,9 @@ namespace MyKidsReg.Controllers
             }
 
             return Ok(foundStudent);
-          
-         
+
+
         }
+     
     }
 }

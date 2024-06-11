@@ -8,6 +8,7 @@ namespace MyKidsReg.Services
     {
         Task<List<Student>> GetAll();
         Task<Student> GetByID(int id);
+        Task<IEnumerable<Student>> GetByDepatmentId(int departmentId);
         Task<Student> CreateStudentAsync(Student newStudent);
         Task UpdateStudents(int id, Student student);
         Task DeleteStudent(int id);
@@ -42,6 +43,10 @@ namespace MyKidsReg.Services
         public Task<Student> GetByID(int id)
         {
             return _rep.GetByID(id);
+        }
+        public async Task<IEnumerable<Student>> GetByDepatmentId(int departmentId)
+        {
+            return await _rep.GetByDepartmentId(departmentId);
         }
 
         public async Task UpdateStudents(int id, Student update)

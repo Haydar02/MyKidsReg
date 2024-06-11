@@ -9,8 +9,10 @@ namespace MyKidsReg.Repositories
         {
             Task<List<TeacherRelation>> GetAll();
             Task<TeacherRelation> GetById(int id);
+            Task<IEnumerable<TeacherRelation>> GetByUserID(int user_id);
+            Task<IEnumerable<TeacherRelation>> GetByDeparmentId(int department_id);
             Task CreateTeacherRelations(TeacherRelation teacherRelation);
-            Task UpdateTeacherRelations(int id, TeacherRelation teacherRelation);
+            Task UpdateTeacherRelations( TeacherRelation teacherRelation);
             Task DeleteTeacherRelations(int id);
             Task<bool> TeacherRelationExist(int User_id, int Department_id);
         }
@@ -32,7 +34,14 @@ namespace MyKidsReg.Repositories
 
                 return await _context.TeacherRelations.FindAsync(id);
             }
-
+            public async Task<IEnumerable< TeacherRelation>> GetByUserID(int user_id)
+            {
+                return await _context.TeacherRelations.Where(u => u.User_id == user_id).ToListAsync();
+            }
+            public async Task<IEnumerable<TeacherRelation>> GetByDeparmentId(int department_id)
+            {
+                return await _context.TeacherRelations.Where(u => u.Department_id == department_id).ToListAsync();
+            }
             public async Task CreateTeacherRelations(TeacherRelation newTeacherRelation)
             {
                 try
@@ -59,7 +68,7 @@ namespace MyKidsReg.Repositories
                     await _context.SaveChangesAsync();
                 }
             }
-            public async Task UpdateTeacherRelations(int id, TeacherRelation teacherRelation)
+            public async Task UpdateTeacherRelations( TeacherRelation teacherRelation)
             {
                 _context.TeacherRelations.Update(teacherRelation);
                 await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿using MyKidsReg.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using MyKidsReg.Models;
 using MyKidsReg.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace MyKidsReg.Services
     {
         Task<List<ParentsRelation>> GetAll();
         Task<ParentsRelation> GetById(int id);
+        Task<IEnumerable<ParentsRelation>> GetByUserId(int userId); 
         Task CreateParentRelations(ParentsRelation parentsRelation);
         Task UpdateParentRelations(int id, ParentsRelation parentsRelation);
         Task DeleteParentRelations(int id);
@@ -48,6 +50,11 @@ namespace MyKidsReg.Services
         {
             return _rep.GetById(id);
         }
+        public async Task<IEnumerable<ParentsRelation>> GetByUserId(int userId)
+        {
+            return await _rep.GetByUserId(userId);
+        }
+
 
         public async Task UpdateParentRelations(int id, ParentsRelation update)
         {

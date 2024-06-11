@@ -39,6 +39,19 @@ namespace MyKidsReg.Controllers
             return Ok(parentsRelation);
         }
 
+        // GET api/<ParentRelationsController>/user/{userId}
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<ParentsRelation>>> GetByUserId(int userId)
+        {
+            var parentsRelations = await _service.GetByUserId(userId);
+            if (parentsRelations == null || !parentsRelations.Any())
+            {
+                return NotFound();
+            }
+            return Ok(parentsRelations);
+        }
+
+
         // POST api/<ParentRelationsController>
         [HttpPost]
         public async Task<IActionResult> CreateParentRelation(ParentsRelation newParentRelation)

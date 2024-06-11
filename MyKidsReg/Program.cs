@@ -49,24 +49,27 @@ builder.Services.AddScoped<IStudentLogRepositories, StudentLogRepositories>();
 builder.Services.AddScoped<IMessageRepositories, MessageRepositories>();
 builder.Services.AddScoped<IMessageServices, MessageServices>();
 
+// Tilføj dette for at lytte på alle netværksinterfaces
+builder.WebHost.UseUrls("http://0.0.0.0:5191");
+
 var app = builder.Build();
-app.UseSwagger();
-app.UseSwaggerUI();
+
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-//else
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-//        c.RoutePrefix = string.Empty; // Dette gør Swagger UI tilgængeligt på roden ("/")
-//    });
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // Dette gør Swagger UI tilgængeligt på roden ("/")
+    });
+}
+
 app.UseRouting();
 app.UseCors("AllowAll");
 

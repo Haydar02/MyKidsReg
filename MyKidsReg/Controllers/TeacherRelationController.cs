@@ -39,7 +39,26 @@ namespace MyKidsReg.Controllers
             }
             return Ok(teacherRelation);
         }
-
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<TeacherRelation>>> GetByUserId(int userId)
+        {
+            var teacherRelations = await _service.GetByUserId(userId);
+            if (teacherRelations == null || !teacherRelations.Any())
+            {
+                return NotFound();
+            }
+            return Ok(teacherRelations);
+        }
+        [HttpGet("department/{department_id}")]
+        public async Task<ActionResult<IEnumerable<TeacherRelation>>> GetByDepartmentid(int department_id)
+        {
+            var teacherRelations = await _service.GetByDepartmentId(department_id);
+            if (teacherRelations == null || !teacherRelations.Any())
+            {
+                return NotFound();
+            }
+            return Ok(teacherRelations);
+        }
         // POST api/<TeacherRelationController>
         [HttpPost]
         public async Task<IActionResult> CreateTeacherRelation(TeacherRelation newTeacherRelation)
@@ -63,6 +82,7 @@ namespace MyKidsReg.Controllers
             {
                 return BadRequest();
             }
+
             try
             {
                 await _service.UpdateTeacherRelations(id, teacherRelation);
@@ -71,8 +91,14 @@ namespace MyKidsReg.Controllers
             {
                 return NotFound(e.Message);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+
             return NoContent();
         }
+
 
         // DELETE api/<TeacherRelationController>/5
         [HttpDelete("{id}")]

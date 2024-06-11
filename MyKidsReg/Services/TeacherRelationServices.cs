@@ -9,10 +9,12 @@ namespace MyKidsReg.Services
         public interface ITeacherRelationServices
         {
             Task<List<TeacherRelation>> GetAll();
+        Task<IEnumerable<TeacherRelation>> GetByUserId(int user_id);
             Task<TeacherRelation> GetById(int id);
             Task CreateTeacherRelations(TeacherRelation teacherRelation);
             Task UpdateTeacherRelations(int id, TeacherRelation teacherRelation);
             Task DeleteTeacherRelations(int id);
+        Task<IEnumerable<TeacherRelation>> GetByDepartmentId(int detparment_id);
         }
     }
 
@@ -49,18 +51,27 @@ namespace MyKidsReg.Services
         {
             return _rep.GetById(id);
         }
-
-        public async Task UpdateTeacherRelations(int id, TeacherRelation update)
-        {
-            var existingTeacherRelation = await _rep.GetById(id);
-            if (existingTeacherRelation == null)
-            {
-                throw new InvalidOperationException($"Parent relationen findes ikke med dette {id}!!!");
-            }
-            existingTeacherRelation.User_id = update.User_id;
-            existingTeacherRelation.Department_id = update.Department_id;
-
-            await _rep.UpdateTeacherRelations(id, existingTeacherRelation);
-        }
+    public async Task<IEnumerable<TeacherRelation>> GetByUserId(int user_id)
+    {
+        return await _rep.GetByUserID(user_id);
     }
+    public async Task<IEnumerable<TeacherRelation>> GetByDepartmentId(int detparment_id)
+    {
+        return await _rep.GetByDeparmentId(detparment_id);
+    }
+    public async Task UpdateTeacherRelations(int id, TeacherRelation update)
+    {
+        var existingTeacherRelation = await _rep.GetById(id);
+        if (existingTeacherRelation == null)
+        {
+            throw new InvalidOperationException($"Teacher relation with ID {id} not found.");
+        }
+
+        existingTeacherRelation.User_id = update.User_id;
+        existingTeacherRelation.Department_id = update.Department_id;
+
+        await _rep.UpdateTeacherRelations(existingTeacherRelation);
+    }
+
+}
 

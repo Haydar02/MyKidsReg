@@ -8,6 +8,7 @@ namespace MyKidsReg.Repositories
     {
         Task <List<Student>> GetAll();
         Task<Student>GetByID(int id);
+        Task<IEnumerable<Student>> GetByDepartmentId(int departmentId);
         Task<Student> CreateAsync(Student newStudent);
         Task UpdateStudent(int id,Student student);
         Task DeleteStudent(int id);
@@ -67,6 +68,10 @@ namespace MyKidsReg.Repositories
         public async Task<Student> GetByID(int id)
         {
             return await _context.Students.FindAsync(id);
+        }
+        public async Task<IEnumerable<Student>> GetByDepartmentId(int departmentId)
+        {
+            return await _context.Students.Where(d => d.Department_id == departmentId).ToListAsync();
         }
 
         public async Task UpdateStudent(int id, Student student)

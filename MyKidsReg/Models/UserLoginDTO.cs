@@ -8,7 +8,9 @@ namespace MyKidsReg.Models
         public string Username { get; set; }
         public string Password { get; set; }
         [JsonIgnore]
-        public User_type user_Type { get; set; }
+        public User_type usertype { get; set; }
+
+        public int User_Id { get; set; }
     }
 }
 public class UpdateUserDTO

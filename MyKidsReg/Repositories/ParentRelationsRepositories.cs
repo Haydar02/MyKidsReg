@@ -4,9 +4,11 @@ using MyKidsReg.Models;
 namespace MyKidsReg.Repositories
 {
     public interface IParentRelationsRepositories
-    { 
+    {
         Task<List<ParentsRelation>> GetAll();
         Task<ParentsRelation> GetById(int id);
+        Task<IEnumerable<ParentsRelation>> GetByUserId(int userId);
+
         Task CreateParentRelations(ParentsRelation parentsRelation);
         Task UpdateParentRelations(int id, ParentsRelation parentsRelation);
         Task DeleteParentRelations(int id);
@@ -29,6 +31,11 @@ namespace MyKidsReg.Repositories
         {
 
             return await _context.ParentsRelations.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<ParentsRelation>> GetByUserId(int userId)
+        {
+            return await _context.ParentsRelations.Where(pr => pr.User_id == userId).ToListAsync();
         }
 
         public async Task CreateParentRelations(ParentsRelation newParentRelation)
@@ -64,27 +71,25 @@ namespace MyKidsReg.Repositories
         }
 
         public async Task<bool> ParentRelationExist(int User_id, int Student_id)
+        {
+            try
             {
-                try
+                if (User_id != null && Student_id != null)
                 {
-                    if (User_id != null)
-                    {
-                        return await _context.ParentsRelations.AnyAsync(u => u.User_id == User_id);
-                    }
-                    else if (Student_id != null)
-                    {
-                        return await _context.ParentsRelations.AnyAsync(u => u.Student_id == Student_id);
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    // Check if there is an existing parent relation with the same user_id and student_id
+                    return await _context.ParentsRelations.AnyAsync(u => u.User_id == User_id && u.Student_id == Student_id);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine($"Fejl under kontrol af ParentRelation: {ex.Message}");
-                    throw;
+                    return false;
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fejl under kontrol af ParentRelation: {ex.Message}");
+                throw;
+            }
         }
+
     }
+}
